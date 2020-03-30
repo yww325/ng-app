@@ -7,11 +7,5 @@
 
 <button (click)="firstClick()">Change Property</button>
 
-<h1>Users</h1>
-
-<ul *ngIf="users">
-  <li *ngFor="let user of users">
-    <img [src]="user.avatar">
-    <p>{{ user.first_name }} {{ user.last_name }}</p>
-  </li>
-</ul>
+<h1>Users Component below:</h1>
+<app-users [users]="users$ | async"></app-users>
