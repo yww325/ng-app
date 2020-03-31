@@ -6,10 +6,7 @@ export const selectUserState = createFeatureSelector<fromUser.State>(
   fromUser.userFeatureKey
 );
 
-export const selectUsersInfo = createSelector<fromUser.State, fromUser.State, any[]>(wholeStoreState=>
-  {
-    return wholeStoreState[fromUser.userFeatureKey]; // can be a const, to always select feature state by feature key(like a sub store).
-  }, state=>
+export const selectUsersInfo = createSelector(selectUserState, state=>
   {
     return state.UsersInfo; // project the property with data info.
   }); 
