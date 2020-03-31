@@ -3,6 +3,8 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 
 import { UserEffects } from './user.effects';
+import { DataService } from 'src/app/services/data.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('UserEffects', () => {
   let actions$: Observable<any>;
@@ -10,8 +12,9 @@ describe('UserEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientModule],
       providers: [
-        UserEffects,
+        UserEffects, DataService,
         provideMockActions(() => actions$)
       ]
     });

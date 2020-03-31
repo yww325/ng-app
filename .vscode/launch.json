@@ -3,13 +3,36 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [ 
         {
+
+            "name": "after ng serve",
+      
             "type": "chrome",
+      
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}"
-        }
+      
+            "port": 4100,
+      
+            // "preLaunchTask": "ng serve",     
+      
+            "url": "http://localhost:4200", 
+      
+            "webRoot": "${workspaceFolder}",
+      
+            "sourceMapPathOverrides": {
+      
+              "webpack:/*": "${webRoot}/*",
+      
+              "/./*": "${webRoot}/*",
+      
+              "/src/*": "${webRoot}/*",
+      
+              "/*": "*",
+      
+              "/./~/*": "${webRoot}/node_modules/*"
+      
+            } 
+          }         
     ]
 }
