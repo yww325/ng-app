@@ -8,7 +8,7 @@ import { DataService } from '../../services/data.service'
 
 
 @Injectable()
-export class UserEffects { EE
+export class UserEffects {
 
   loadUsers$ = createEffect(() => {
     return this.actions$.pipe( 

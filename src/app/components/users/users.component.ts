@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UsersComponent implements OnInit {
   @Input()
-  users: Observable<any>
+  users: Observable<[]>
   constructor() { }
 
   ngOnInit() {

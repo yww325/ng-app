@@ -1,0 +1,18 @@
+
+<mat-form-field>
+  <mat-label>filter by tags</mat-label>
+  <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
+</mat-form-field>
+
+<button style="margin-left: 10px;" mat-raised-button (click)="search()">Go!</button>
+<ul *ngIf="photos$">
+  <li *ngFor="let photo of photos$ | async">
+    <div class="border">
+        <img src="data:image/jpeg;base64,{{photo.thumbnail}}"   
+        matTooltip='Tags: {{photo.tags}}&#13;Date Taken: {{photo.dateTaken}}'
+        matTooltipClass="allow-cr" 
+        (click)="onClickThumb(photo)"
+        />
+    </div> 
+  </li>
+</ul>
