@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
 import { Store, select } from '@ngrx/store';
@@ -14,41 +14,73 @@ import { Photo } from 'src/app/models/photo';
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.scss']
 })
-export class PhotoListComponent implements OnInit {
+export class PhotoListComponent implements OnDestroy {
 
   searchKey =''; 
-  photos$ = this._store.pipe(select(selectPhotosInfo))
-          .pipe(map(a => this.filterPhotoType(a)));
+  sub = this._store.pipe(select(selectPhotosInfo)).subscribe(o=>{
+            this.pageOfItems = o.PhotosInfo;
+            this.totalItems = o.count;
+          });
 
+  // array of all items to be paged
+  items: Array<any>; 
+
+  // current page of items
+  pageOfItems: Array<any>; 
+  currentPage: number = 1;
+  readonly pageSize:number = 12;
+  totalItems: number;
+  totalPages : number;
 
   constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { }
 
-  filterPhotoType(a : Photo[]) : Photo[]{
-   return a.filter(p=>p.mediaType =='photo');
-  }
-
-  ngOnInit() { 
-  }
-
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  } 
   onKeydown(event) {
     if (event.key === "Enter") {
+      this.currentPage = 1;
       this.search();
     }
   }
 
-  search() {
-    console.log(this.searchKey);
-    this._store.dispatch(loadPhotos({ key: this.searchKey.toLowerCase()}));
+  onGoClick() {
+    this.currentPage = 1;
+    this.search();
   }
 
-  onClickThumb(photo) {
+  search() {
+    console.log(this.searchKey);
+    this._store.dispatch(loadPhotos(
+      { 
+        key: this.searchKey.toLowerCase(),
+        mediaType :"photo", //just process photo for now
+        pageSize: this.pageSize,
+        skipPage: this.currentPage - 1
+      }));
+  }
+
+  onClickThumb(index) { 
     this.dialog.open(PhotoDetailComponent, {
       disableClose: true,
-      data: photo,
-      width: "1300px",
-      height: "980px", 
-    });
-    
+      data: { 
+        index : index,
+        pageOfItems : this.pageOfItems,
+        pageSize : this.pageSize,
+        currentPage : this.currentPage,
+        searchKey : this.searchKey,
+        totalPages : this.totalPages,
+      },
+      width: "1200px",
+      height: "800px", 
+    }); 
+  }
+
+  onChangePage(event) {
+    // update current page
+    this.currentPage = event.newPage;
+    this.totalPages = event.totalPages;
+    this.search();
   }
 
 }

@@ -1,12 +1,30 @@
-.border img {
+.border { 
+    text-align: center;
+    white-space: nowrap; 
+}
+
+/* https://stackoverflow.com/questions/7273338/how-to-vertically-align-an-image-inside-a-div */
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.border img { 
+   // display: flex;
+    /* https://flexboxfroggy.com/ an alternative for horizontal center*/
+  //  justify-content: center;
+    vertical-align: middle;
     margin: 5px;
     transition: .5s ease;
+    /* https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit */
+    object-fit: scale-down; 
+    /*  must use max- to not force a bigger side, really fit the object*/
+    max-height: 180px;   
+    max-width:  240px;
     }
         
 .border img:hover{
 box-shadow: 0 0 0 5px #5f0ff3;
 transition: .5s ease;
 }
-
-
-    

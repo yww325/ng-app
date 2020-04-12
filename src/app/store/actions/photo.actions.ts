@@ -2,7 +2,12 @@ import { createAction, props } from '@ngrx/store';
 
 export const loadPhotos = createAction(
   '[Photo] Load Photos',
-  props<{key: string;}>()
+  props<{
+    key: string;
+    mediaType : string;
+    pageSize: number;
+    skipPage : number;
+  }>()
 );
 
 export const loadPhotosSuccess = createAction(

@@ -4,11 +4,13 @@ import * as PhotoActions from '../actions/photo.actions';
 export const photoFeatureKey = 'photo';
 
 export interface State {
-  PhotosInfo : []
+  PhotosInfo : [],
+  count : 0
 }
 
 export const initialState: State = {
-  PhotosInfo : []
+  PhotosInfo : [],
+  count : 0
 };
 
 const photoReducer = createReducer(
@@ -18,7 +20,8 @@ const photoReducer = createReducer(
   on(PhotoActions.loadPhotosSuccess, (state, action) => {
     return {
       ...state,
-      PhotosInfo: action.data.value
+      PhotosInfo: action.data.value,
+      count : action.data['@odata.count'],
     } 
   }),
   on(PhotoActions.loadPhotosFailure, (state, action) => state),

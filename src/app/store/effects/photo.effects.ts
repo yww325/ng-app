@@ -7,14 +7,14 @@ import { EMPTY, of } from 'rxjs';
 
 @Injectable()
 export class PhotoEffects {
-
+/* https://github.com/ngrx/platform/issues/1368 no more @effect decorator */
   loadPhotos$ = createEffect(() => {
     return this.actions$.pipe( 
 
       ofType(PhotoActions.loadPhotos),
       concatMap((act) =>
         /** An EMPTY observable only emits completion. Replace with your own observable API request */
-        this.data.getPhotos(act.key).pipe(
+        this.data.getPhotos(act.key, act.mediaType, act.pageSize, act.skipPage*act.pageSize).pipe(
           map(data => PhotoActions.loadPhotosSuccess({ data })),
           catchError(error => of(PhotoActions.loadPhotosFailure({ error }))))
       )

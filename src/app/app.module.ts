@@ -20,6 +20,7 @@ import * as fromPhoto from './store/reducers/photo.reducer';
 import { PhotoEffects } from './store/effects/photo.effects';
 import { PhotoDetailComponent } from './components/photo-detail/photo-detail.component';
 import { DemoMaterialModule } from './demo-material-module';
+import { JwPaginationComponent } from './components/jw-pagination/jw-pagination.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DemoMaterialModule } from './demo-material-module';
     HomeComponent,
     UsersComponent,
     PhotoListComponent,
-    PhotoDetailComponent,    
+    PhotoDetailComponent,
+    JwPaginationComponent,    
   ],
   entryComponents: [
     PhotoDetailComponent

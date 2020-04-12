@@ -11,7 +11,7 @@ export class PhotoService {
 
   private readonly baseUrl = "http://localhost/MyPhotos/odata/Photos?";
 
-  public getPhotos(key : string): Observable<any> {
-    return this.http.get(this.baseUrl + `$filter=Tags/any(s:contains(s, '${key}'))`);
+  public getPhotos(tag : string, mediaType:string, top: number, skip : number): Observable<any> {
+    return this.http.get(this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}')) and mediaType eq '${mediaType}'&$top=${top}&$skip=${skip}&$count=true&$orderby=dateTaken`);
   }
 }
