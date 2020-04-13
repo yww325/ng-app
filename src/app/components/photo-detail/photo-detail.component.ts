@@ -7,6 +7,7 @@ import { loadPhotos } from 'src/app/store/actions/photo.actions';
 import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
 import { Subscription } from 'rxjs';
 import { PhotoService } from 'src/app/services/photo.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-photo-detail',
@@ -15,7 +16,7 @@ import { PhotoService } from 'src/app/services/photo.service';
 })
 export class PhotoDetailComponent implements OnDestroy {
 
-  readonly fileBaseUrl:string = 'http://localhost/MyPhotos/File/';
+  readonly fileBaseUrl:string = environment.production ?"" :"http://localhost" + '/MyPhotos/File/';
   url: string;
 
   pageOfItems: any;
