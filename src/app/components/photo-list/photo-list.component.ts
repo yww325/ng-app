@@ -71,8 +71,8 @@ export class PhotoListComponent implements OnDestroy {
         searchKey : this.searchKey,
         totalPages : this.totalPages,
       },
-      width: "1200px",
-      height: "800px", 
+      // width: "1200px",  no need to specify w/h, use up the space.
+      // height: "800px", 
     }); 
   }
 

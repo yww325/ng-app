@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
 })
 export class PhotoDetailComponent implements OnDestroy {
 
-  readonly fileBaseUrl:string = environment.production ?"" :"http://localhost" + '/MyPhotos/File/';
+  readonly fileBaseUrl:string = (environment.production ?"" :"http://localhost") + '/MyPhotos/File/';
   url: string;
 
   pageOfItems: any;
