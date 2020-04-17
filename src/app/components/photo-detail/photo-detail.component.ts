@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy,ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Photo } from 'src/app/models/photo';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
@@ -14,11 +14,11 @@ import { environment } from '../../../environments/environment';
   templateUrl: './photo-detail.component.html',
   styleUrls: ['./photo-detail.component.scss']
 })
-export class PhotoDetailComponent implements OnDestroy {
+export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
 
+  @ViewChild("myPhoto") myPhoto: ElementRef<HTMLImageElement>;
   readonly fileBaseUrl:string = (environment.production ?"" :"http://localhost") + '/MyPhotos/File/';
-  url: string;
-
+  showSpinner: boolean =false;
   pageOfItems: any;
   index: any;
   readonly pageSize: any;
@@ -36,9 +36,11 @@ export class PhotoDetailComponent implements OnDestroy {
     this.pageSize = data.pageSize;
     this.currentPage = data.currentPage;
     this.searchKey = data.searchKey;
-    this.totalPages = data.totalPages;
-    this.SetUrl(); 
-    console.log(this.url);
+    this.totalPages = data.totalPages;  
+  }
+  ngAfterViewInit(): void {  
+    setTimeout(()=>{this.SetUrl();}) ;
+   // https://blog.angular-university.io/angular-debugging/
   }
 
 
@@ -51,7 +53,27 @@ export class PhotoDetailComponent implements OnDestroy {
   
   private SetUrl() {
     let photo = this.pageOfItems[this.index];
-    this.url = this.fileBaseUrl + photo.path.replace('\\', '/') + '/' + photo.fileName;
+    let url = this.fileBaseUrl + photo.path.replace('\\', '/') + '/' + photo.fileName;
+    this.showSpinner = true; 
+    this.PreloadImage(url, ()=>{
+        this.showSpinner = false;
+    }); 
+  }
+
+  private PreloadImage(url, callback){ 
+    const img = this.myPhoto.nativeElement;
+     img.src = url;
+    if(img.complete){
+      callback();
+      img.onload=function(){};
+    }
+    else{
+      img.onload = function() {
+        callback();
+        //    clear onLoad, IE behaves irratically with animated gifs otherwise
+        img.onload=function(){};
+      }
+    }
   }
 
   closeModal(): void {

@@ -1,8 +1,10 @@
 <div class="modal-content">
   <span class="close cursor" (click)="closeModal()">&times;</span>
   <div> 
-    <img src='{{url}}' class="fit" 
-    />
+    <div class="center" *ngIf="showSpinner">
+      <mat-spinner color="accent"></mat-spinner>
+    </div> 
+   <img #myPhoto class="fit" />   
   </div>    
     <!-- Next/previous controls -->
     <!-- https://www.w3schools.com/howto/howto_js_lightbox.asp -->

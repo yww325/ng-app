@@ -62,3 +62,14 @@
 .next:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
+
+.center {
+  margin:0;
+  position: absolute;
+  top: 50%;
+  left: 50%; 
+  /* https://stackoverflow.com/questions/40530101/why-is-translatey-50-needed-to-center-an-element-which-is-at-top-50/40530404 */
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
