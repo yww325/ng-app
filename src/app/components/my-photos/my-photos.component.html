@@ -1,0 +1,10 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <p>Auto-resizing sidenav</p> 
+  </mat-drawer>
+  <div id='menuToggler' (click)="drawer.toggle()"> 
+  </div> 
+  <div class="example-sidenav-content"> 
+    <app-photo-list></app-photo-list>
+  </div> 
+</mat-drawer-container>

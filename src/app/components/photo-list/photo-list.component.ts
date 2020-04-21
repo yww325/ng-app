@@ -1,26 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
 import { Store, select } from '@ngrx/store';
 import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
 import { loadPhotos } from 'src/app/store/actions/photo.actions';
-import { map } from 'rxjs/operators';
 import { PhotoDetailComponent } from '../photo-detail/photo-detail.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Photo } from 'src/app/models/photo';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-photo',
+  selector: 'app-photo-list',
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.scss']
 })
 export class PhotoListComponent implements OnDestroy {
 
   searchKey =''; 
-  sub = this._store.pipe(select(selectPhotosInfo)).subscribe(o=>{
+  photoSub = this._store.pipe(select(selectPhotosInfo)).subscribe(o=>{
             this.pageOfItems = o.PhotosInfo;
             this.totalItems = o.count;
-          });
+          }); 
 
   // array of all items to be paged
   items: Array<any>; 
@@ -32,11 +29,12 @@ export class PhotoListComponent implements OnDestroy {
   totalItems: number;
   totalPages : number;
 
-  constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { }
+  constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { } 
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.photoSub.unsubscribe();
   } 
+
   onKeydown(event) {
     if (event.key === "Enter") {
       this.currentPage = 1;

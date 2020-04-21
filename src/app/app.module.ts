@@ -21,6 +21,9 @@ import { PhotoEffects } from './store/effects/photo.effects';
 import { PhotoDetailComponent } from './components/photo-detail/photo-detail.component';
 import { DemoMaterialModule } from './demo-material-module';
 import { JwPaginationComponent } from './components/jw-pagination/jw-pagination.component';
+import * as fromFolder from './store/reducers/folder.reducer';
+import { FolderEffects } from './store/effects/folder.effects';
+import { MyPhotosComponent } from './components/my-photos/my-photos.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,8 @@ import { JwPaginationComponent } from './components/jw-pagination/jw-pagination.
     UsersComponent,
     PhotoListComponent,
     PhotoDetailComponent,
-    JwPaginationComponent,    
+    JwPaginationComponent,
+    MyPhotosComponent,    
   ],
   entryComponents: [
     PhotoDetailComponent
@@ -46,10 +50,11 @@ import { JwPaginationComponent } from './components/jw-pagination/jw-pagination.
     StoreModule.forRoot({}),
     StoreModule.forFeature(fromUser.userFeatureKey, fromUser.reducer),
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([UserEffects, PhotoEffects, PhotoEffects]),
+    EffectsModule.forFeature([UserEffects, PhotoEffects, PhotoEffects, FolderEffects]),
     BrowserAnimationsModule,   
     FormsModule,
-    StoreModule.forFeature(fromPhoto.photoFeatureKey, fromPhoto.reducer)
+    StoreModule.forFeature(fromPhoto.photoFeatureKey, fromPhoto.reducer),
+    StoreModule.forFeature(fromFolder.folderFeatureKey, fromFolder.reducer)
   ],  
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,16 @@
+.example-container { 
+    height: 850px; 
+   /* border: 1px solid rgba(0, 0, 0, 0.5); */
+  }
+  
+
+.example-sidenav {
+    padding: 10px;
+  }
+
+.example-sidenav-content { 
+    height: 100%; 
+    padding-left: 50px;
+}
+  
+#menuToggler{writing-mode: vertical-lr;background:rgb(125, 119, 133);width: 20px; height: 100%;left: 0;position: absolute;top: 0;}

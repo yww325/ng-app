@@ -1,13 +1,12 @@
-
 <mat-form-field>
   <mat-label>filter by tags</mat-label>
   <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
 </mat-form-field>
-
 <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button> 
+
 <div *ngIf="totalItems">
   <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize" (changePage)="onChangePage($event)"></jw-pagination>
-   <div>
+  <div>
     <mat-grid-list cols="4" rowHeight="200px">
       <mat-grid-tile  *ngFor="let photo of pageOfItems; index as i;"> 
         <div class="border">
@@ -20,8 +19,7 @@
       </div>  
       </mat-grid-tile>
     </mat-grid-list>
-   </div>
-   <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize"  (changePage)="onChangePage($event)"></jw-pagination>
+  </div>
+  <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize"  (changePage)="onChangePage($event)"></jw-pagination>
 </div>
-
 
