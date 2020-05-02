@@ -7,6 +7,7 @@ export const loadPhotos = createAction(
     mediaType : string;
     pageSize: number;
     skipPage : number;
+    paths : string[];
   }>()
 );
 

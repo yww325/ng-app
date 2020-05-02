@@ -24,6 +24,10 @@ import { JwPaginationComponent } from './components/jw-pagination/jw-pagination.
 import * as fromFolder from './store/reducers/folder.reducer';
 import { FolderEffects } from './store/effects/folder.effects';
 import { MyPhotosComponent } from './components/my-photos/my-photos.component';
+import { FolderTreeComponent } from './components/folder-tree/folder-tree.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +40,8 @@ import { MyPhotosComponent } from './components/my-photos/my-photos.component';
     PhotoListComponent,
     PhotoDetailComponent,
     JwPaginationComponent,
-    MyPhotosComponent,    
+    MyPhotosComponent,
+    FolderTreeComponent,    
   ],
   entryComponents: [
     PhotoDetailComponent
@@ -54,7 +59,12 @@ import { MyPhotosComponent } from './components/my-photos/my-photos.component';
     BrowserAnimationsModule,   
     FormsModule,
     StoreModule.forFeature(fromPhoto.photoFeatureKey, fromPhoto.reducer),
-    StoreModule.forFeature(fromFolder.folderFeatureKey, fromFolder.reducer)
+    StoreModule.forFeature(fromFolder.folderFeatureKey, fromFolder.reducer),
+     // Instrumentation must be imported after importing StoreModule (config is optional)
+     StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states 
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
   ],  
   bootstrap: [AppComponent]
 })

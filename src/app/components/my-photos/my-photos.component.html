@@ -1,10 +1,16 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side">
-    <p>Auto-resizing sidenav</p> 
+    <app-folder-tree (selectionChanged)='selectionChanged($event)'></app-folder-tree>
   </mat-drawer>
   <div id='menuToggler' (click)="drawer.toggle()"> 
   </div> 
   <div class="example-sidenav-content"> 
-    <app-photo-list></app-photo-list>
+    <mat-form-field>
+      <mat-label>filter by tags</mat-label>
+      <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
+    </mat-form-field>
+    <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button> 
+    
+    <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
   </div> 
 </mat-drawer-container>

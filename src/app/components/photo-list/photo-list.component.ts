@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
 import { Store, select } from '@ngrx/store';
 import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
@@ -11,9 +11,12 @@ import {MatDialog} from '@angular/material/dialog';
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.scss']
 })
-export class PhotoListComponent implements OnDestroy {
+export class PhotoListComponent implements OnDestroy
+{
+  @Input() searchKey: string;
+  @Input() paths: string[];
+   currentPage: number = 1;
 
-  searchKey =''; 
   photoSub = this._store.pipe(select(selectPhotosInfo)).subscribe(o=>{
             this.pageOfItems = o.PhotosInfo;
             this.totalItems = o.count;
@@ -24,7 +27,7 @@ export class PhotoListComponent implements OnDestroy {
 
   // current page of items
   pageOfItems: Array<any>; 
-  currentPage: number = 1;
+
   readonly pageSize:number = 12;
   totalItems: number;
   totalPages : number;
@@ -33,28 +36,17 @@ export class PhotoListComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.photoSub.unsubscribe();
-  } 
+  }  
 
-  onKeydown(event) {
-    if (event.key === "Enter") {
-      this.currentPage = 1;
-      this.search();
-    }
-  }
-
-  onGoClick() {
-    this.currentPage = 1;
-    this.search();
-  }
-
-  search() {
-    console.log(this.searchKey);
+  search() {    
+    console.log("search key: " + this.searchKey);
     this._store.dispatch(loadPhotos(
       { 
         key: this.searchKey.toLowerCase(),
         mediaType :"photo", //just process photo for now
         pageSize: this.pageSize,
-        skipPage: this.currentPage - 1
+        skipPage: this.currentPage - 1,
+        paths: this.paths
       }));
   }
 
@@ -68,6 +60,7 @@ export class PhotoListComponent implements OnDestroy {
         currentPage : this.currentPage,
         searchKey : this.searchKey,
         totalPages : this.totalPages,
+        paths : this.paths,
       },
       // width: "1200px",  no need to specify w/h, use up the space.
       // height: "800px", 

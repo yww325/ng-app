@@ -1,32 +1,38 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import * as fromFolder from '../../store/reducers/folder.reducer';
-import { Store, select } from '@ngrx/store';
-import { loadFolders } from 'src/app/store/actions/folder.actions';
-import { selectFolders } from 'src/app/store/selectors/folder.selectors';
-import { Folder } from 'src/app/models/folder';
-
-
+import { Component, ViewChild, NgZone} from '@angular/core'; 
+import { PhotoListComponent } from '../photo-list/photo-list.component';
+import { SelectionModel } from '@angular/cdk/collections';
+import { FolderFlatNode } from '../folder-tree/folder-database';
 @Component({
   selector: 'app-my-photos',
   templateUrl: './my-photos.component.html',
   styleUrls: ['./my-photos.component.scss']
 })
-export class MyPhotosComponent implements OnInit, OnDestroy {
+export class MyPhotosComponent  { 
+  searchKey ='';
+  paths : string[] = [];  
+  @ViewChild(PhotoListComponent) photoList:PhotoListComponent;
 
-  folderSub = this._store.pipe(select(selectFolders)).subscribe(folders=>{
-    this.folders = folders;
-  });
-
-  folders: Array<Folder>;
-  
-  constructor(private _store: Store<fromFolder.State>) { } 
-
-  ngOnDestroy(): void {
-    this.folderSub.unsubscribe();
+  onKeydown(event) {
+    if (event.key === "Enter") { 
+      this.photoList.currentPage = 1;
+      this.photoList.search();
+    }
   }
 
-  ngOnInit(): void {
-    this._store.dispatch(loadFolders());
-  }
+  onGoClick() {
+    this.photoList.currentPage = 1; 
+    this.photoList.search();
+  } 
 
+  selectionChanged(selection: SelectionModel<FolderFlatNode>) {
+    let allPaths = selection.selected.map(f=>f.path).sort((a,b) => a.length -b.length);
+    this.paths =[];
+    allPaths.forEach(element => {
+      if (this.paths.some(path=>element.startsWith(path))) {
+         return;
+      }
+      this.paths.push(element);
+    });  
+  }
 }
+ 

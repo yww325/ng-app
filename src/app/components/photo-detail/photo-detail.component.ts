@@ -26,6 +26,7 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
   readonly searchKey: any; 
   sub :Subscription;
   readonly totalPages: any;
+  paths : string[]
  
 
   constructor(private photoService: PhotoService,
@@ -37,6 +38,7 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
     this.currentPage = data.currentPage;
     this.searchKey = data.searchKey;
     this.totalPages = data.totalPages;  
+    this.paths = data.paths;
   }
   ngAfterViewInit(): void {  
     setTimeout(()=>{this.SetUrl();}) ;
@@ -100,7 +102,7 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
     }    
     this.sub = this.photoService.getPhotos(
       this.searchKey, "photo",
-      this.pageSize, (this.currentPage + direction - 1) * this.pageSize).subscribe(o => { 
+      this.pageSize, (this.currentPage + direction - 1) * this.pageSize, this.paths).subscribe(o => { 
         if (o.value.length > 0) {
           this.pageOfItems = o.value; 
           this.index = direction === 1 ? 0 : o.value.length-1;

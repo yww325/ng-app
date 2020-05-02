@@ -14,7 +14,7 @@ export class PhotoEffects {
       ofType(PhotoActions.loadPhotos),
       concatMap((act) =>
         /** An EMPTY observable only emits completion. Replace with your own observable API request */
-        this.data.getPhotos(act.key, act.mediaType, act.pageSize, act.skipPage*act.pageSize).pipe(
+        this.data.getPhotos(act.key, act.mediaType, act.pageSize, act.skipPage*act.pageSize, act.paths).pipe(
           map(data => PhotoActions.loadPhotosSuccess({ data })),
           catchError(error => of(PhotoActions.loadPhotosFailure({ error }))))
       )
