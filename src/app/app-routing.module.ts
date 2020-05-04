@@ -7,10 +7,11 @@ import { ContactComponent } from './components/contact/contact.component';
 import { MyPhotosComponent } from './components/my-photos/my-photos.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: MyPhotosComponent },
+  { path: 'photo', component: MyPhotosComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'photo', component: MyPhotosComponent },
+  { path: 'home', component: HomeComponent },
 ];
 
 @NgModule({

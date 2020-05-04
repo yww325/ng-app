@@ -39,7 +39,7 @@ export class PhotoListComponent implements OnDestroy
   }  
 
   search() {    
-    console.log("search key: " + this.searchKey);
+    console.log("search key: " + this.searchKey+"  paths: " + this.paths);
     this._store.dispatch(loadPhotos(
       { 
         key: this.searchKey.toLowerCase(),
