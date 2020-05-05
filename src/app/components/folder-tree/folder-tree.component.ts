@@ -92,7 +92,8 @@ export class FolderTreeComponent implements OnDestroy  {
     const descendants = this.treeControl.getDescendants(node);
     var allSelected = descendants.every(child => this.checklistSelection.isSelected(child));
     if (allSelected &&  !this.checklistSelection.isSelected(node)) {
-      this.checklistSelection.select(node);
+      return false;
+     // this.checklistSelection.select(node);
     } else if (!allSelected && this.checklistSelection.isSelected(node)) {
       this.checklistSelection.deselect(node);
     }
