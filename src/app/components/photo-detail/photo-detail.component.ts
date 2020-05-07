@@ -109,7 +109,7 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
       this.sub = null;
     }    
     this.sub = this.photoService.getPhotos(
-      this.searchKey, "photo",
+      this.searchKey, 
       this.pageSize, (this.currentPage + direction - 1) * this.pageSize, this.paths).subscribe(o => { 
         if (o.value.length > 0) {
           this.pageOfItems = o.value; 
