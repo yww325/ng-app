@@ -42,8 +42,7 @@ export class PhotoListComponent implements OnDestroy
     console.log("search key: " + this.searchKey+"  paths: " + this.paths);
     this._store.dispatch(loadPhotos(
       { 
-        key: this.searchKey.toLowerCase(),
-        mediaType :"photo", //just process photo for now
+        key: this.searchKey.toLowerCase(),    
         pageSize: this.pageSize,
         skipPage: this.currentPage - 1,
         paths: this.paths
