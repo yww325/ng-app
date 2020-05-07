@@ -3,8 +3,7 @@ import { createAction, props } from '@ngrx/store';
 export const loadPhotos = createAction(
   '[Photo] Load Photos',
   props<{
-    key: string;
-    mediaType : string;
+    key: string; 
     pageSize: number;
     skipPage : number;
     paths : string[];

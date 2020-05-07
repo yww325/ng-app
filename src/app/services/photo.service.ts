@@ -13,10 +13,10 @@ export class PhotoService {
 
   private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Photos?";
 
-  public getPhotos(tag : string, mediaType:string, top: number, skip : number, paths : string[]): Observable<any> {  
+  public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
     const reducer = (accumulator, currentValue) => accumulator + ` and startswith(Path, '${currentValue}')`;
     let startWithPaths = paths.reduce(reducer,"");
-    let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}')) and mediaType eq '${mediaType}'${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=dateTaken`;
+    let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=dateTaken`;
     return this.http.get(url);
   }
 }

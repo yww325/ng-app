@@ -43,6 +43,7 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
+import { MatVideoModule  } from 'mat-video';
 
 @NgModule({
   exports: [
@@ -88,6 +89,7 @@ import {
     MatTreeModule,
     PortalModule,
     ScrollingModule,
+    MatVideoModule    
   ]
 })
 export class DemoMaterialModule {}

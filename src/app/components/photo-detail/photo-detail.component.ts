@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy,ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Inject, OnDestroy,ElementRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Photo } from 'src/app/models/photo';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
@@ -14,7 +14,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './photo-detail.component.html',
   styleUrls: ['./photo-detail.component.scss']
 })
-export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
+export class PhotoDetailComponent implements OnDestroy, OnInit {
 
   @ViewChild("myPhoto") myPhoto: ElementRef<HTMLImageElement>;
   readonly fileBaseUrl:string = (environment.production ?"" :"http://localhost") + '/MyPhotos/File/';
@@ -27,7 +27,8 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
   sub :Subscription;
   readonly totalPages: any;
   paths : string[]
- 
+  mediaType : string; 
+  videoUrl : string;
 
   constructor(private photoService: PhotoService,
   public dialogRef: MatDialogRef<PhotoDetailComponent>,
@@ -40,11 +41,9 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
     this.totalPages = data.totalPages;  
     this.paths = data.paths;
   }
-  ngAfterViewInit(): void {  
-    setTimeout(()=>{this.SetUrl();}) ;
-   // https://blog.angular-university.io/angular-debugging/
-  }
-
+  ngOnInit(): void {
+    this.SetUrl();
+  } 
 
   ngOnDestroy(): void {
     if (this.sub) {
@@ -54,12 +53,21 @@ export class PhotoDetailComponent implements OnDestroy, AfterViewInit {
 
   
   private SetUrl() {
-    let photo = this.pageOfItems[this.index];
-    let url = this.fileBaseUrl + photo.path.replace('\\', '/') + '/' + photo.fileName;
-    this.showSpinner = true; 
-    this.PreloadImage(url, ()=>{
-        this.showSpinner = false;
-    }); 
+    let photo = this.pageOfItems[this.index];  
+    this.mediaType = photo.mediaType; 
+    const searchRegExp = /\\/g;
+    let url = this.fileBaseUrl + photo.path.replace(searchRegExp, '/') + '/' + photo.fileName;
+    this.videoUrl = url; 
+
+    if (this.mediaType ==="photo") {
+           // https://blog.angular-university.io/angular-debugging/ for #myPhoto to get element
+      setTimeout(()=>{
+        this.showSpinner = true; 
+        this.PreloadImage(url, ()=>{
+            this.showSpinner = false;
+        }); 
+      });
+    } 
   }
 
   private PreloadImage(url, callback){ 

@@ -3,13 +3,26 @@
   <div>
     <mat-grid-list cols="4" rowHeight="200px">
       <mat-grid-tile  *ngFor="let photo of pageOfItems; index as i;"> 
-        <div class="border">
+        <div class="border" [ngSwitch]="photo.mediaType">
           <span class="helper"></span>
-          <img src="data:image/jpeg;base64,{{photo.thumbnail}}"   
+          <img *ngSwitchCase="'photo'" src="data:image/jpeg;base64,{{photo.thumbnail}}"   
           matTooltip='Tags: {{photo.tags}}&#13;Date Taken: {{photo.dateTaken}}'
           matTooltipClass="allow-cr" 
           (click)="onClickThumb(i)"
           />
+
+          <img *ngSwitchCase="'video'" src="assets/video_icon.jpg"   
+          matTooltip='Tags: {{photo.tags}}'
+          matTooltipClass="allow-cr" 
+          (click)="onClickThumb(i)"
+          />
+
+          <img *ngSwitchCase="'sound'" src="assets/sound.png"   
+          matTooltip='Tags: {{photo.tags}}'
+          matTooltipClass="allow-cr" 
+          (click)="onClickThumb(i)"
+          />
+
       </div>  
       </mat-grid-tile>
     </mat-grid-list>
