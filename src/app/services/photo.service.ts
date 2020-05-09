@@ -14,7 +14,7 @@ export class PhotoService {
   private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Photos?";
 
   public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
-    const reducer = (accumulator, currentValue) => accumulator + ` and startswith(Path, '${currentValue}')`;
+    const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
     let startWithPaths = paths.reduce(reducer,"");
     let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=dateTaken`;
     return this.http.get(url);
