@@ -15,8 +15,8 @@ export class PhotoService {
 
   public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
     const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
-    let startWithPaths = paths.reduce(reducer,"");
-    let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=dateTaken`;
+    let startWithPaths = paths.length ==0 ? "" : ` and (${paths.reduce(reducer,"").substring(4)})`;
+    let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
   }
 }
