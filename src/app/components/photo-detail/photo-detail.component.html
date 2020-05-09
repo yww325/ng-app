@@ -6,7 +6,7 @@
     </div> 
    <img *ngSwitchCase="'photo'" #myPhoto  class="fit" />   
     <div *ngSwitchCase="'video'"  class="video-fit"  >
-      <mat-video src="{{videoUrl}}" ></mat-video>
+      <mat-video src="{{videoUrl}}" [download]="true" ></mat-video>
     </div>
     
     
