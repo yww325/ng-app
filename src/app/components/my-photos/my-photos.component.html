@@ -9,8 +9,9 @@
       <mat-label>filter by tags</mat-label>
       <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
     </mat-form-field>
-    <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button> 
-    
+    <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button>  
+    <button style="margin-left: 10px;" mat-raised-button  (click)="markPrivate()"  *ngIf="loggedIn" >Mark Selected Private</button>
+    <button style="margin-left: 10px;" mat-raised-button  (click)="markPublic()"  *ngIf="loggedIn" >Mark Selected Public</button>
     <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
   </div> 
 </mat-drawer-container>

@@ -13,10 +13,20 @@ export class PhotoService {
 
   private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Photos?";
 
+  private readonly privateUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/private?";
+
   public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
     const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
     let startWithPaths = paths.length ==0 ? "" : ` and (${paths.reduce(reducer,"").substring(4)})`;
     let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
+  }
+
+  public markPrivate(path: string): Observable<any>  {
+    return this.http.patch(this.privateUrl + `path=${path}`, null, {responseType: 'text'});
+  }
+
+  public markPublic(path: string): Observable<any>  {
+    return this.http.patch(this.privateUrl + `path=${path}&toPrivate=false`, null, {responseType: 'text'});
   }
 }

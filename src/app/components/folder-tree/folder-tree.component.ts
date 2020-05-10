@@ -1,9 +1,9 @@
-import { Component,  OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component,  OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import { FolderDatabase, FolderFlatNode, FolderNode } from './folder-database';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs'; 
 
 @Component({
   selector: 'app-folder-tree',
@@ -11,7 +11,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./folder-tree.component.scss'],
   providers: [FolderDatabase]
 })
-export class FolderTreeComponent implements OnDestroy  {
+export class FolderTreeComponent implements OnDestroy, OnInit {
+
+
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<FolderFlatNode, FolderNode>();
 
@@ -35,17 +37,18 @@ export class FolderTreeComponent implements OnDestroy  {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<FolderFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener); 
-    this.sub = database.dataChange.subscribe(data => {
-      this.dataSource.data = data;
-    });
-    if (!this.dataSource.data || this.dataSource.data.length ==0) {
-      database.load();
-    } 
-
+    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);   
     this.checklistSelection.changed.subscribe(()=>{
         this.selectionChanged.emit(this.checklistSelection);
     })
+  }
+  ngOnInit(): void {
+    this.sub = this.database.dataChange.subscribe(data => {
+      this.dataSource.data = data;
+    }); 
+    if (!this.dataSource.data || this.dataSource.data.length ==0) {
+      this.database.load();
+    } 
   }
   ngOnDestroy(): void {
     this.sub.unsubscribe();
@@ -116,6 +119,5 @@ export class FolderTreeComponent implements OnDestroy  {
         ? this.checklistSelection.select(...descendants)
         : this.checklistSelection.deselect(...descendants); 
     } 
-  }
-
+  } 
 }

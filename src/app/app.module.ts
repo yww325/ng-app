@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +27,8 @@ import { MyPhotosComponent } from './components/my-photos/my-photos.component';
 import { FolderTreeComponent } from './components/folder-tree/folder-tree.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
+import { TokenService } from './services/token.service';
+import { TokenInterceptor } from './services/token-interceptor.service';
 
 
 @NgModule({
@@ -66,6 +68,14 @@ import { environment } from 'src/environments/environment';
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
   ],  
+  providers: [
+    TokenService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
