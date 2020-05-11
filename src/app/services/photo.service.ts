@@ -12,8 +12,8 @@ export class PhotoService {
   constructor(private http: HttpClient) { }
 
   private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Photos?";
-
   private readonly privateUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/private?";
+  private readonly privateByIdUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/privateById?";  
 
   public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
     const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
@@ -28,5 +28,13 @@ export class PhotoService {
 
   public markPublic(path: string): Observable<any>  {
     return this.http.patch(this.privateUrl + `path=${path}&toPrivate=false`, null, {responseType: 'text'});
+  }
+
+  public markPrivateById(id: string): Observable<any>  {
+    return this.http.patch(this.privateByIdUrl + `id=${id}`, null, {responseType: 'text'});
+  }
+
+  public markPublicById(id: string): Observable<any>  {
+    return this.http.patch(this.privateByIdUrl + `id=${id}&toPrivate=false`, null, {responseType: 'text'});
   }
 }

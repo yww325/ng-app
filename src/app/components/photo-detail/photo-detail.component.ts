@@ -8,6 +8,7 @@ import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
 import { Subscription } from 'rxjs';
 import { PhotoService } from 'src/app/services/photo.service';
 import { environment } from '../../../environments/environment';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-photo-detail',
@@ -29,8 +30,9 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
   paths : string[]
   mediaType : string; 
   videoUrl : string;
+  loggedIn: boolean = false;
 
-  constructor(private photoService: PhotoService,
+  constructor(private photoService: PhotoService,private tokenService : TokenService,
   public dialogRef: MatDialogRef<PhotoDetailComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any) {
     this.pageOfItems = data.pageOfItems;
@@ -42,6 +44,8 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
     this.paths = data.paths;
   }
   ngOnInit(): void {
+    let token = this.tokenService.getToken();
+    this.loggedIn =  token !== '' && token !== 'unauthorized';
     this.SetUrl();
   } 
 
@@ -121,6 +125,20 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
           console.log(o);
         }
       });
+  }
+
+  markPrivateById()  {
+      let photo = this.pageOfItems[this.index];
+      this.photoService.markPrivateById(photo.id).subscribe(o=>{
+        console.log(o);
+      });
+  }
+
+  markPublicById() {
+    let photo = this.pageOfItems[this.index];
+    this.photoService.markPublicById(photo.id).subscribe(o=>{
+      console.log(o);
+    }); 
   }
 }
  

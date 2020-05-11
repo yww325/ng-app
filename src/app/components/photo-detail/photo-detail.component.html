@@ -17,5 +17,15 @@
     <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
     <a class="next" (click)="plusSlides(1)">&#10095;</a>
 </div>
+ <!-- https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/ -->
+<div style="text-align: center;" >
+  <button  type="button"  *ngIf="loggedIn"  style="float: left;"  mat-raised-button color ="primary" (click)="markPrivateById()">  
+    Mark Private
+  </button> 
+  <span class="allow-cr" style="display: inline-block;">Tags: {{pageOfItems[index].tags}}&#13;Date Taken: {{pageOfItems[index].dateTaken}}</span>
+  <button type="button"  *ngIf="loggedIn"  style="float: right;" mat-raised-button color ="primary" (click)="markPublicById()">  
+    Mark Public
+  </button> 
+</div>
  
 
