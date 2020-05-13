@@ -82,12 +82,16 @@ export class FolderTreeComponent implements OnDestroy, OnInit {
     return flatNode;
   }
 
-  checkAll(){
+  checkAll(){   
     for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
       if(!this.checklistSelection.isSelected(this.treeControl.dataNodes[i]))
-        this.checklistSelection.toggle(this.treeControl.dataNodes[i]);
-      this.treeControl.expand(this.treeControl.dataNodes[i])
+      this.checklistSelection.toggle(this.treeControl.dataNodes[i]); 
     }
+  }
+
+  
+  clearAll(){
+    this.checklistSelection.clear(); 
   }
 
   /** Whether all the descendants of the node are selected */
