@@ -1,6 +1,6 @@
-<button  (click)="checkAll()">Check All</button>
+<button class="left" (click)="checkAll()">Check All</button>
 <button class="right" (click)="clearAll()">Clear All</button>  
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<mat-tree class="tree" [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding> 
     <button mat-icon-button disabled></button>
     <mat-checkbox

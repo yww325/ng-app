@@ -1,5 +1,15 @@
 .right {
-    position:absolute;
-    right:10px;
-    top:12px;
+    float: right;
+    margin-right: 10px;
+    top:10px;
+}
+
+.left {
+    float: left;
+     margin-left: 10px;
+    top:10px;
+}
+
+.tree {
+     margin-top: 25px;
 }
