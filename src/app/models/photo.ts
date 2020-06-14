@@ -5,4 +5,5 @@ export class Photo {
   dateTaken:Date;
   mediaType : string;
   tags:string[];
+  isPrivate: boolean;
 }

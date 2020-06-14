@@ -5,55 +5,52 @@ import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
 import { loadPhotos } from 'src/app/store/actions/photo.actions';
 import { PhotoDetailComponent } from '../photo-detail/photo-detail.component';
 import {MatDialog} from '@angular/material/dialog';
+import { Photo } from 'src/app/models/photo';
 
 @Component({
   selector: 'app-photo-list',
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.scss']
 })
-export class PhotoListComponent implements OnDestroy
-{
+export class PhotoListComponent implements OnDestroy {
   @Input() searchKey: string;
   @Input() paths: string[];
-   currentPage: number = 1;
+   currentPage = 1;
 
-  photoSub = this._store.pipe(select(selectPhotosInfo)).subscribe(o=>{
+  photoSub = this._store.pipe(select(selectPhotosInfo)).subscribe(o => {
             this.pageOfItems = o.PhotosInfo;
             this.totalItems = o.count;
-          }); 
-
-  // array of all items to be paged
-  items: Array<any>; 
+          });
 
   // current page of items
-  pageOfItems: Array<any>; 
+  pageOfItems: Array<Photo>;
 
-  readonly pageSize:number = 12;
+  readonly pageSize: number = 12;
   totalItems: number;
-  totalPages : number;
+  totalPages: number;
 
-  constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { } 
+  constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     this.photoSub.unsubscribe();
-  }  
+  }
 
-  search() {    
-    console.log("search key: " + this.searchKey+"  paths: " + this.paths);
+  search() {
+    console.log('search key: ' + this.searchKey +'  paths: ' + this.paths);
     this._store.dispatch(loadPhotos(
-      { 
-        key: this.searchKey.toLowerCase(),    
+      {
+        key: this.searchKey.toLowerCase(),
         pageSize: this.pageSize,
         skipPage: this.currentPage - 1,
         paths: this.paths
       }));
   }
 
-  onClickThumb(index) { 
+  onClickThumb(index) {
     this.dialog.open(PhotoDetailComponent, {
       disableClose: true,
-      data: { 
-        index : index,
+      data: {
+        index,
         pageOfItems : this.pageOfItems,
         pageSize : this.pageSize,
         currentPage : this.currentPage,
@@ -62,8 +59,8 @@ export class PhotoListComponent implements OnDestroy
         paths : this.paths,
       },
       // width: "1200px",  no need to specify w/h, use up the space.
-      // height: "800px", 
-    }); 
+      // height: "800px",
+    });
   }
 
   onChangePage(event) {

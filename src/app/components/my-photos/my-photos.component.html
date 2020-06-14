@@ -10,8 +10,12 @@
       <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
     </mat-form-field>
     <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button>  
-    <button style="margin-left: 10px;" mat-raised-button  (click)="markPrivate()"  *ngIf="loggedIn" >Mark Selected folder(s) Private</button>
-    <button style="margin-left: 10px;" mat-raised-button  (click)="markPublic()"  *ngIf="loggedIn" >Mark Selected folder(s) Public</button>
+    <button style="margin-left: 10px;" mat-raised-button  (click)="markPrivate()"  *ngIf="loggedIn" data-toggle="tooltip" title="Mark Selected folder(s) Private" >
+      <span class="material-icons">lock</span>
+    </button>
+    <button style="margin-left: 10px;" mat-raised-button  (click)="markPublic()"  *ngIf="loggedIn" data-toggle="tooltip" title="Mark Selected folder(s) Public" >
+       <span class="material-icons">remove_red_eye</span>
+    </button>
     <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
   </div> 
 </mat-drawer-container>

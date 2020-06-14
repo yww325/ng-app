@@ -1,5 +1,8 @@
 <div class="modal-content">
-  <span class="close cursor" (click)="closeModal()">&times;</span>
+  <div class="topBar">
+    <span *ngIf="loggedIn"  class="material-icons">{{isPrivate?'lock':'remove_red_eye'}}</span>
+    <span class="close" (click)="closeModal()">&times;</span>
+  </div>  
   <div [ngSwitch]="mediaType"> 
     <div class="center" *ngIf="showSpinner">
       <mat-spinner color="accent"></mat-spinner>
@@ -19,12 +22,12 @@
 </div>
  <!-- https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/ -->
 <div style="text-align: center;" >
-  <button  type="button"  *ngIf="loggedIn"  style="float: left;"  mat-raised-button color ="primary" (click)="markPrivateById()">  
-    Mark Private
+  <button  type="button" *ngIf="loggedIn"  data-toggle="tooltip" title="make it private"  style="float: left;"  mat-raised-button color ="primary" (click)="markPrivateById()">  
+    <span class="material-icons">lock</span>
   </button> 
   <span class="allow-cr" style="display: inline-block;">Tags: {{pageOfItems[index].tags}}&#13;Date Taken: {{pageOfItems[index].dateTaken}}</span>
-  <button type="button"  *ngIf="loggedIn"  style="float: right;" mat-raised-button color ="primary" (click)="markPublicById()">  
-    Mark Public
+  <button type="button"  *ngIf="loggedIn" data-toggle="tooltip" title="make it pubic"  style="float: right;" mat-raised-button color ="primary" (click)="markPublicById()">  
+    <span class="material-icons">remove_red_eye</span>
   </button> 
 </div>
  
