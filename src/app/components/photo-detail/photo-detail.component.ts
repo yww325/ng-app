@@ -15,7 +15,7 @@ import { trigger } from '@angular/animations';
 export class PhotoDetailComponent implements OnDestroy, OnInit {
 
   @ViewChild('myPhoto') myPhoto: ElementRef<HTMLImageElement>;
-  readonly fileBaseUrl: string = (environment.production ?'' :'http://localhost') + '/MyPhotos/File/';
+  readonly fileBaseUrl: string = (environment.production ? '' : 'http://localhost') + '/MyPhotos/File/';
   showSpinner = false;
   pageOfItems: Photo[];
   index: any;
@@ -29,6 +29,8 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
   videoUrl: string;
   loggedIn = false;
   isPrivate: boolean;
+  isEdit = false;
+  tagsInOneLine: string;
 
   constructor(private photoService: PhotoService,
               private tokenService: TokenService,
@@ -60,11 +62,12 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
     const photo = this.pageOfItems[this.index];
     this.isPrivate = photo.isPrivate;
     this.mediaType = photo.mediaType;
+    this.tagsInOneLine = photo.tags.join();
     const searchRegExp = /\\/g;
     const url = this.fileBaseUrl + photo.path.replace(searchRegExp, '/') + '/' + photo.fileName;
     this.videoUrl = url;
 
-    if (this.mediaType ==='photo') {
+    if (this.mediaType === 'photo') {
            // https://blog.angular-university.io/angular-debugging/ for #myPhoto to get element
       setTimeout(() => {
         this.showSpinner = true;
@@ -108,6 +111,10 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
   }
 
   switchPage(direction: number) {
+   this.reloadPageOfItems(direction, true);
+  }
+
+  private reloadPageOfItems(direction: number, changeIndex: boolean) {
     if (this.sub) {
       this.sub.unsubscribe();
       this.sub = null;
@@ -117,7 +124,9 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
       this.pageSize, (this.currentPage + direction - 1) * this.pageSize, this.paths).subscribe(o => {
         if (o.value.length > 0) {
           this.pageOfItems = o.value;
-          this.index = direction === 1 ? 0 : o.value.length - 1;
+          if (changeIndex) {
+            this.index = direction === 1 ? 0 : o.value.length - 1;
+          }
           this.currentPage = this.currentPage + direction;
           this.SetUrl();
         } else {
@@ -130,14 +139,32 @@ export class PhotoDetailComponent implements OnDestroy, OnInit {
   markPrivateById()  {
       const photo = this.pageOfItems[this.index];
       this.photoService.markPrivateById(photo.id).subscribe(o => {
-        this.isPrivate = true;
-      });
+         this.reloadPageOfItems(0, false);
+      }, err => {console.log(err); });
   }
 
   markPublicById() {
     const photo = this.pageOfItems[this.index];
     this.photoService.markPublicById(photo.id).subscribe(o => {
-     this.isPrivate = false;
-    });
+      this.reloadPageOfItems(0, false);
+    }, err => {console.log(err); });
+  }
+
+  editTags() {
+    this.isEdit = true;
+  }
+
+  cancelEditTags() {
+    this.isEdit = false;
+    this.tagsInOneLine = this.pageOfItems[this.index].tags.join();
+  }
+
+  saveTags() {
+    this.isEdit = false;
+    const photo = this.pageOfItems[this.index];
+    const newTags = this.tagsInOneLine.toLowerCase().split(',');
+    this.photoService.updateTags(photo.id, newTags).subscribe(o => {
+      this.reloadPageOfItems(0, false);
+     }, err => {console.log(err); });
   }
 }

@@ -25,7 +25,28 @@
   <button  type="button" *ngIf="loggedIn"  data-toggle="tooltip" title="make it private"  style="float: left;"  mat-raised-button color ="primary" (click)="markPrivateById()">  
     <span class="material-icons">lock</span>
   </button> 
-  <span class="allow-cr" style="display: inline-block;">Tags: {{pageOfItems[index].tags}}&#13;Date Taken: {{pageOfItems[index].dateTaken}}</span>
+  
+    <div style="display: inline-block; flex-direction: column;" >
+      <div *ngIf="!isEdit">
+          <span>Tags:</span>
+          <span>{{tagsInOneLine}}</span>  
+          <button tags type="button" class="tagsButton" *ngIf="loggedIn" data-toggle="tooltip" title="Edit Tags"  mat-raised-button color ="primary" (click)="editTags()">  
+            Edit Tags
+          </button> 
+      </div> 
+      <div *ngIf="isEdit&&loggedIn">
+        <span>Tags:</span>
+        <input class="tagsInput" [(ngModel)]="tagsInOneLine">
+        <button  type="button" class="tagsButton" data-toggle="tooltip" title="Cancel Edit Tags"   mat-raised-button color ="primary" (click)="cancelEditTags()">  
+          Cancel
+        </button> 
+        <button  type="button" class="tagsButton" data-toggle="tooltip" title="Save Tags"   mat-raised-button color ="primary" (click)="saveTags()">  
+          Save
+        </button> 
+      </div>
+      <span >Date taken: {{pageOfItems[index].dateTaken}}</span>
+    </div> 
+   
   <button type="button"  *ngIf="loggedIn" data-toggle="tooltip" title="make it pubic"  style="float: right;" mat-raised-button color ="primary" (click)="markPublicById()">  
     <span class="material-icons">remove_red_eye</span>
   </button> 

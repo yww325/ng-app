@@ -8,17 +8,17 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class PhotoService {
-  
+
   constructor(private http: HttpClient) { }
 
-  private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Photos?";
-  private readonly privateUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/private?";
-  private readonly privateByIdUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/privateById?";  
+  private readonly baseUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/odata/v1/Photos';
+  private readonly privateUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/api/v1/Default/private?';
+  private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/api/v1/Default/privateById?';
 
-  public getPhotos(tag : string, top: number, skip : number, paths : string[]): Observable<any> {  
+  public getPhotos(tag: string, top: number, skip: number, paths: string[]): Observable<any> {
     const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
-    let startWithPaths = paths.length ==0 ? "" : ` and (${paths.reduce(reducer,"").substring(4)})`;
-    let url = this.baseUrl + `$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
+    const startWithPaths = paths.length === 0 ? '' : ` and (${paths.reduce(reducer, '').substring(4)})`;
+    const url = this.baseUrl + `?$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
   }
 
@@ -36,5 +36,9 @@ export class PhotoService {
 
   public markPublicById(id: string): Observable<any>  {
     return this.http.patch(this.privateByIdUrl + `id=${id}&toPrivate=false`, null, {responseType: 'text'});
+  }
+
+  public updateTags(id: string, newTags: string[]): Observable<any>  {
+    return this.http.patch(this.baseUrl + `/${id}`, { tags : newTags }, {responseType: 'text'});
   }
 }
