@@ -16,7 +16,7 @@ export class PhotoService {
   private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/api/v1/Default/privateById?';
 
   public getPhotos(tag: string, top: number, skip: number, paths: string[]): Observable<any> {
-    const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${currentValue}')`;
+    const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${encodeURIComponent(currentValue)}')`;
     const startWithPaths = paths.length === 0 ? '' : ` and (${paths.reduce(reducer, '').substring(4)})`;
     const url = this.baseUrl + `?$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
