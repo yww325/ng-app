@@ -16,10 +16,16 @@ export class PhotoService {
   private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/api/v1/Default/privateById?';
 
   public getPhotos(tag: string, top: number, skip: number, paths: string[]): Observable<any> {
-    const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${encodeURIComponent(currentValue)}')`;
+    const reducer = (accumulator: string, currentValue: string) => accumulator +
+     ` or startswith(Path, '${encodeURIComponent(this.escapeQuote(currentValue))}')`;
     const startWithPaths = paths.length === 0 ? '' : ` and (${paths.reduce(reducer, '').substring(4)})`;
-    const url = this.baseUrl + `?$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
+    const url = this.baseUrl +
+    `?$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
+  }
+
+  private escapeQuote(input: string): string {
+     return input.replace('\'', '\'\'');
   }
 
   public markPrivate(path: string): Observable<any>  {
