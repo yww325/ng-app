@@ -15,7 +15,7 @@ import { trigger } from '@angular/animations';
 export class PhotoDetailComponent implements OnDestroy, OnInit {
 
   @ViewChild('myPhoto') myPhoto: ElementRef<HTMLImageElement>;
-  readonly fileBaseUrl: string = (environment.production ? '' : 'http://localhost') + '/MyPhotos/File/';
+  readonly fileBaseUrl: string = (environment.production ? '' : 'http://localhost') + environment.apiPath + '/File/';
   showSpinner = false;
   pageOfItems: Photo[];
   index: any;
