@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiPath : '/MyPhotos'
+  apiPath : '/MyPhotos2'
 };

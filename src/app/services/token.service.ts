@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TokenService {
 
-  private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/api/v1/Default/validate";
+  private readonly baseUrl = (environment.production ?"" :"http://localhost") + environment.apiPath + "/api/v1/Default/validate";
   constructor(private http: HttpClient) { }
 
   AuthenticationChanged = new Subject<string>();

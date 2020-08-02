@@ -11,7 +11,7 @@ export class FolderService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly baseUrl = (environment.production ?"" :"http://localhost") + "/MyPhotos/odata/v1/Folders";
+  private readonly baseUrl = (environment.production ?"" :"http://localhost") + environment.apiPath + "/odata/v1/Folders";
   
   public getFolders(): Observable<Folder[]> {  
     return this.http.get<Folder[]>(this.baseUrl);

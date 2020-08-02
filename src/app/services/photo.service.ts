@@ -11,9 +11,9 @@ export class PhotoService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly baseUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/odata/v1/Photos';
-  private readonly privateUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/api/v1/Default/private?';
-  private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + '/MyPhotos/api/v1/Default/privateById?';
+  private readonly baseUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/odata/v1/Photos';
+  private readonly privateUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/api/v1/Default/private?';
+  private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/api/v1/Default/privateById?';
 
   public getPhotos(tag: string, top: number, skip: number, paths: string[]): Observable<any> {
     const reducer = (accumulator, currentValue) => accumulator + ` or startswith(Path, '${encodeURIComponent(currentValue)}')`;
