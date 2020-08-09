@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Creating new folder</h1>
+<div mat-dialog-content>
+  <p>under : {{ data.parentPath }}</p>
+  <mat-form-field>
+    <mat-label>New Folder Name</mat-label>
+    <input matInput [(ngModel)]="data.folderName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCanelClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.folderName" cdkFocusInitial>Ok</button>
+</div>

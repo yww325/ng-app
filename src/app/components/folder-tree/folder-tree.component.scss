@@ -1,13 +1,23 @@
 .right {
     float: right;
-    margin-right: 10px;
+   // margin-right: 10px;
     top:10px;
-}
+} 
 
 .left {
     float: left;
-     margin-left: 10px;
+    // margin-left: 10px;
     top:10px;
+}
+
+// https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/
+.ThreeItemMenu {
+    display:flex;
+    justify-content:center;
+}
+
+.TwoItemMenu {
+    display:inline; 
 }
 
 .tree {

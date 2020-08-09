@@ -1,5 +1,9 @@
-<button class="left" (click)="checkAll()">Check All</button>
-<button class="right" (click)="clearAll()">Clear All</button>  
+<div  [ngClass]="{'ThreeItemMenu' : loggedIn, 'TwoItemMenu' : !loggedIn}">
+  <button class="left" (click)="checkAll()">Check All</button>
+  <button  *ngIf="loggedIn" (click)="createFolder()">Create Folder</button>
+  <button class="right" (click)="clearAll()">Clear All</button>  
+</div>
+
 <mat-tree class="tree" [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding> 
     <button mat-icon-button disabled></button>
@@ -14,8 +18,7 @@
         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
       </mat-icon>
     </button>
-    <mat-checkbox [checked]="descendantsAllSelected(node)"
-                  [indeterminate]="descendantsPartiallySelected(node)"
+    <mat-checkbox [checked]="checklistSelection.isSelected(node)"                
                   (change)="todoItemSelectionToggle(node)">{{node.name}}</mat-checkbox>
   </mat-tree-node>
 </mat-tree>

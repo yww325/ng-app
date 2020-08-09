@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{ data.message }}</p>
+</div>
+<!-- https://stackoverflow.com/questions/49420069/how-to-align-button-right-inside-dialog-angular-material/49422195 -->
+<div mat-dialog-actions align="end">
+  <button mat-button *ngIf="!data.okOnly" [mat-dialog-close]="data.no" > {{ data.no }}</button>
+  <button mat-button [mat-dialog-close]="data.yes" cdkFocusInitial>{{ data.yes }}</button>
+</div>

@@ -6,4 +6,5 @@ export class Photo {
   mediaType : string;
   tags:string[];
   isPrivate: boolean;
+  isChecked: boolean; // for multi selection to move
 }

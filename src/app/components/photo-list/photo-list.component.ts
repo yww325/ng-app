@@ -17,8 +17,10 @@ export class PhotoListComponent implements OnDestroy {
   @Input() paths: string[];
    currentPage = 1;
 
-  photoSub = this._store.pipe(select(selectPhotosInfo)).subscribe(o => {
-            this.pageOfItems = o.PhotosInfo;
+  photoSub = this.store.pipe(select(selectPhotosInfo)).subscribe(o => {
+          // reconstruct javascript object so that the field isChecked is there(not if deserialize from json)
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+            this.pageOfItems = o.PhotosInfo.map(rawData => Object.assign(new Photo(), rawData));
             this.totalItems = o.count;
           });
 
@@ -29,7 +31,7 @@ export class PhotoListComponent implements OnDestroy {
   totalItems: number;
   totalPages: number;
 
-  constructor(private _store: Store<fromPhoto.State>, public dialog: MatDialog) { }
+  constructor(private store: Store<fromPhoto.State>, public dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     this.photoSub.unsubscribe();
@@ -37,7 +39,7 @@ export class PhotoListComponent implements OnDestroy {
 
   search() {
     console.log('search key: ' + this.searchKey +'  paths: ' + this.paths);
-    this._store.dispatch(loadPhotos(
+    this.store.dispatch(loadPhotos(
       {
         key: this.searchKey.toLowerCase(),
         pageSize: this.pageSize,

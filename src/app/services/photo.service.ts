@@ -11,15 +11,16 @@ export class PhotoService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly baseUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/odata/v1/Photos';
-  private readonly privateUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/api/v1/Default/private?';
-  private readonly privateByIdUrl = (environment.production ?'' :'http://localhost') + environment.apiPath + '/api/v1/Default/privateById?';
+  private readonly odataUrl = (environment.production ? '' : 'http://localhost') + environment.apiPath + '/odata/v1/Photos';
+  private readonly apiUrl = (environment.production ? '' : 'http://localhost') + environment.apiPath + '/api/v1/Photos';
+  private readonly privateUrl = this.apiUrl + '/private?';
+  private readonly privateByIdUrl =  this.apiUrl + '/privateById?';
 
   public getPhotos(tag: string, top: number, skip: number, paths: string[]): Observable<any> {
     const reducer = (accumulator: string, currentValue: string) => accumulator +
-     ` or startswith(Path, '${encodeURIComponent(this.escapeQuote(currentValue))}')`;
+     ` or Path eq '${encodeURIComponent(this.escapeQuote(currentValue))}'`;
     const startWithPaths = paths.length === 0 ? '' : ` and (${paths.reduce(reducer, '').substring(4)})`;
-    const url = this.baseUrl +
+    const url = this.odataUrl +
     `?$filter=Tags/any(s:contains(s, '${tag}'))${startWithPaths}&$top=${top}&$skip=${skip}&$count=true&$orderby=Path,dateTaken`;
     return this.http.get(url);
   }
@@ -45,6 +46,10 @@ export class PhotoService {
   }
 
   public updateTags(id: string, newTags: string[]): Observable<any>  {
-    return this.http.patch(this.baseUrl + `/${id}`, { tags : newTags }, {responseType: 'text'});
+    return this.http.patch(this.odataUrl + `/${id}`, { tags : newTags }, {responseType: 'text'});
+  }
+
+  public movePhotos(photoIds: string[], folderId: string): Observable<any>  {
+    return this.http.patch(this.apiUrl + `/move?folderId=${folderId}`, photoIds, {responseType: 'text'});
   }
 }

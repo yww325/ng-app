@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, ElementRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Photo } from 'src/app/models/photo';
 import { Subscription } from 'rxjs';
 import { PhotoService } from 'src/app/services/photo.service';

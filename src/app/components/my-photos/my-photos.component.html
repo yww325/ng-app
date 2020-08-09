@@ -16,6 +16,9 @@
     <button style="margin-left: 10px;" mat-raised-button  (click)="markPublic()"  *ngIf="loggedIn" data-toggle="tooltip" title="Mark Selected folder(s) Public" >
        <span class="material-icons">remove_red_eye</span>
     </button>
+    <button style="margin-left: 10px;" mat-raised-button  (click)="movePhotos()"  *ngIf="loggedIn" data-toggle="tooltip" title="Move selected photos to selected folder" >
+        Move
+   </button>
     <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
   </div> 
 </mat-drawer-container>

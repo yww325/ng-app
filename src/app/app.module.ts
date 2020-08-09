@@ -29,6 +29,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { TokenService } from './services/token.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
+import { CreateNewFolderDialogComponent } from './components/folder-tree/create-new-folder-dialog.component';
+import { GeneralDialogComponent } from './components/shared/general-dialog.component';
 
 
 @NgModule({
@@ -43,10 +45,14 @@ import { TokenInterceptor } from './services/token-interceptor.service';
     PhotoDetailComponent,
     JwPaginationComponent,
     MyPhotosComponent,
-    FolderTreeComponent,    
+    FolderTreeComponent,
+    CreateNewFolderDialogComponent,
+    GeneralDialogComponent,
   ],
   entryComponents: [
-    PhotoDetailComponent
+    PhotoDetailComponent,
+    CreateNewFolderDialogComponent,
+    GeneralDialogComponent
   ],
   imports: [
     BrowserModule,
