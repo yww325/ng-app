@@ -19,7 +19,7 @@ export class GeneralDialogComponent  {
 
   constructor(
     public dialogRef: MatDialogRef<GeneralDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: GeneralDialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: GeneralDialogData) {
       this.data = Object.assign(new GeneralDialogData(), this.data);
     }
 }

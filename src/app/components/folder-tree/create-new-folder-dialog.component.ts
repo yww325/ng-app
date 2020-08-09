@@ -3,7 +3,7 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 interface DialogData {
   parentPath: string;
-  foldName: string;
+  folderName: string;
 }
 
 @Component({
