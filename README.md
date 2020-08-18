@@ -25,3 +25,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## backend code is needed to run
+https://github.com/yww325/MyPhotoWebApi
+call the ingest api in swagger to create thumbnail and folder structures in db
+
