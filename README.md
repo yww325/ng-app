@@ -1,6 +1,16 @@
+![Image of UI](https://github.com/yww325/ng-app/blob/master/docs/Capture1.PNG)
+![Image of UI2](https://github.com/yww325/ng-app/blob/master/docs/Capture2.PNG)
 # NgApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+This project was a playground both for learning angular, also serving as personal photo album online, 
+was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+
+# Feature
+* tree like folder structure of photos, videos and sound files
+* logg-in user can have admin feature
+* pagination of photos thumbnail display 
+* filter by tag
+* full image viewing and slide forward and backward. 
 
 ## Development server
 
