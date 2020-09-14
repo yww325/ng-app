@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, Input, OnChanges, ChangeDetectorRef, AfterContentInit } from '@angular/core';
 import * as fromPhoto from '../../store/reducers/photo.reducer';
 import { Store, select } from '@ngrx/store';
 import { selectPhotosInfo } from 'src/app/store/selectors/photo.selectors';
@@ -6,16 +6,26 @@ import { loadPhotos } from 'src/app/store/actions/photo.actions';
 import { PhotoDetailComponent } from '../photo-detail/photo-detail.component';
 import {MatDialog} from '@angular/material/dialog';
 import { Photo } from 'src/app/models/photo';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-photo-list',
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.scss']
 })
-export class PhotoListComponent implements OnDestroy {
+export class PhotoListComponent implements OnDestroy, AfterContentInit  {
   @Input() searchKey: string;
   @Input() paths: string[];
    currentPage = 1;
+  cols = 4;
+
+  gridByBreakpoint = {
+    xl: 8,
+    lg: 6,
+    md: 4,
+    sm: 2,
+    xs: 1
+  };
 
   photoSub = this.store.pipe(select(selectPhotosInfo)).subscribe(o => {
           // reconstruct javascript object so that the field isChecked is there(not if deserialize from json)
@@ -31,14 +41,21 @@ export class PhotoListComponent implements OnDestroy {
   totalItems: number;
   totalPages: number;
 
-  constructor(private store: Store<fromPhoto.State>, public dialog: MatDialog) { }
+  constructor(private store: Store<fromPhoto.State>, public dialog: MatDialog,
+              private mediaObserver: MediaObserver) { }
 
   ngOnDestroy(): void {
     this.photoSub.unsubscribe();
   }
 
+  ngAfterContentInit() {
+    this.mediaObserver.media$.subscribe((change: MediaChange) => {
+      this.cols = this.gridByBreakpoint[change.mqAlias];
+    });
+  }
+
   search() {
-    console.log('search key: ' + this.searchKey +'  paths: ' + this.paths);
+    console.log('search key: ' + this.searchKey + '  paths: ' + this.paths);
     this.store.dispatch(loadPhotos(
       {
         key: this.searchKey.toLowerCase(),

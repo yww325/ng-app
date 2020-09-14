@@ -31,6 +31,7 @@ import { TokenService } from './services/token.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
 import { CreateNewFolderDialogComponent } from './components/folder-tree/create-new-folder-dialog.component';
 import { GeneralDialogComponent } from './components/shared/general-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -47,7 +48,7 @@ import { GeneralDialogComponent } from './components/shared/general-dialog.compo
     MyPhotosComponent,
     FolderTreeComponent,
     CreateNewFolderDialogComponent,
-    GeneralDialogComponent,
+    GeneralDialogComponent
   ],
   entryComponents: [
     PhotoDetailComponent,
@@ -73,7 +74,8 @@ import { GeneralDialogComponent } from './components/shared/general-dialog.compo
       maxAge: 25, // Retains last 25 states 
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
-  ],  
+    FlexLayoutModule
+  ],
   providers: [
     TokenService,
     {
