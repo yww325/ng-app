@@ -20,11 +20,11 @@ export class PhotoListComponent implements OnDestroy, AfterContentInit  {
   cols = 4;
 
   gridByBreakpoint = {
-    xl: 8,
-    lg: 6,
-    md: 4,
+    xl: 5,
+    lg: 4,
+    md: 3,
     sm: 2,
-    xs: 1
+    xs: 2
   };
 
   photoSub = this.store.pipe(select(selectPhotosInfo)).subscribe(o => {
@@ -51,6 +51,7 @@ export class PhotoListComponent implements OnDestroy, AfterContentInit  {
   ngAfterContentInit() {
     this.mediaObserver.media$.subscribe((change: MediaChange) => {
       this.cols = this.gridByBreakpoint[change.mqAlias];
+      console.log ("media change: " + change.mqAlias);
     });
   }
 

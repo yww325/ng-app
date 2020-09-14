@@ -4,7 +4,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FolderFlatNode } from '../folder-tree/folder-database';
 import { TokenService } from 'src/app/services/token.service';
 import { PhotoService } from 'src/app/services/photo.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { GeneralDialogComponent, GeneralDialogData } from '../shared/general-dialog.component';
 
 interface Folder {

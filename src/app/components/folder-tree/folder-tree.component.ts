@@ -2,7 +2,8 @@ import { Component,  OnDestroy, Output, EventEmitter, OnInit } from '@angular/co
 import {SelectionModel} from '@angular/cdk/collections';
 import { FolderDatabase, FolderFlatNode, FolderNode } from './folder-database';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlattener, MatTreeFlatDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { Subscription } from 'rxjs';
 import { CreateNewFolderDialogComponent } from './create-new-folder-dialog.component';
 import { FolderService } from 'src/app/services/folder.service';

@@ -1,7 +1,7 @@
 <div *ngIf="totalItems">
   <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize" (changePage)="onChangePage($event)"></jw-pagination>
   <div>
-    <mat-grid-list cols="cols" rowHeight="200px">
+    <mat-grid-list cols="{{cols}}" rowHeight="200px">
       <mat-grid-tile  *ngFor="let photo of pageOfItems; index as i;"> 
         <div style="display: inline-block; flex-direction: column; text-align: center;" >
             <div class="border" [ngSwitch]="photo.mediaType">
