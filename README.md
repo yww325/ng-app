@@ -12,11 +12,13 @@ This is a playground both for learning angular, also being used as personal phot
 * pagination of photos thumbnail display 
 * filter by tag(supported by oData)
 * full image viewing and slide forward and backward. 
-* responsive UI
+* responsive UI (Flex layout)
+* Angular Material
+* NRGX
 
 # NgApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version ~~7.3.8~~(updated to 10).
 
 ## Development server
 
