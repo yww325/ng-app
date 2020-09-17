@@ -3,8 +3,8 @@
 This is a playground both for learning angular, also being used as personal photo album online(hosted somewhere else).
 ![Image of UI](https://github.com/yww325/ng-app/blob/master/docs/Capture1.PNG)
 ![Image of UI2](https://github.com/yww325/ng-app/blob/master/docs/Capture2.PNG)
-demo site: http://40.84.193.207/ng-app/
-backend(separated repo, see bottom) MongoDB + asp.net core webapi + oData http://40.84.193.207/MyPhotos/swagger
+* demo site: http://40.84.193.207/ng-app/
+* backend(separated repo, see bottom) MongoDB + asp.net core webapi + oData http://40.84.193.207/MyPhotos/swagger
 # Feature
 
 * tree like folder structure of photos, videos and sound files
