@@ -36,8 +36,7 @@ export class PhotoListComponent implements OnDestroy, AfterContentInit  {
 
   // current page of items
   pageOfItems: Array<Photo>;
-
-  readonly pageSize: number = 12;
+   pageSize = 12;
   totalItems: number;
   totalPages: number;
 
@@ -51,6 +50,7 @@ export class PhotoListComponent implements OnDestroy, AfterContentInit  {
   ngAfterContentInit() {
     this.mediaObserver.media$.subscribe((change: MediaChange) => {
       this.cols = this.gridByBreakpoint[change.mqAlias];
+      this.pageSize = this.cols * 3;
       console.log ("media change: " + change.mqAlias);
     });
   }
