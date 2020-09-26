@@ -1,26 +1,50 @@
-<div style="min-height: 850px;">
-<mat-drawer-container>
-  <mat-drawer #drawer class="example-sidenav" mode="side">
-    <app-folder-tree (selectionChanged)='selectionChanged($event)'></app-folder-tree>
-  </mat-drawer>
-  <div id='menuToggler' (click)="drawer.toggle()"> 
-  </div> 
-  <div class="example-sidenav-content"> 
-    <mat-form-field>
-      <mat-label>filter by tags</mat-label>
-      <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)">
-    </mat-form-field>
-    <button style="margin-left: 10px;" mat-raised-button (click)="onGoClick()">Go!</button>  
-    <button style="margin-left: 10px;" mat-raised-button  (click)="markPrivate()"  *ngIf="loggedIn" data-toggle="tooltip" title="Mark Selected folder(s) Private" >
-      <span class="material-icons">lock</span>
-    </button>
-    <button style="margin-left: 10px;" mat-raised-button  (click)="markPublic()"  *ngIf="loggedIn" data-toggle="tooltip" title="Mark Selected folder(s) Public" >
-       <span class="material-icons">remove_red_eye</span>
-    </button>
-    <button style="margin-left: 10px;" mat-raised-button  (click)="movePhotos()"  *ngIf="loggedIn" data-toggle="tooltip" title="Move selected photos to selected folder" >
+<div style="min-height: 850px">
+  <mat-drawer-container autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <app-folder-tree
+        (selectionChanged)="selectionChanged($event)"
+      ></app-folder-tree>
+    </mat-drawer>
+    <div id="menuToggler" (click)="drawer.toggle()"></div>
+    <div class="example-sidenav-content">
+      <mat-form-field>
+        <mat-label>filter by tags</mat-label>
+        <input matInput [(ngModel)]="searchKey" (keydown)="onKeydown($event)" />
+      </mat-form-field>
+      <button style="margin-left: 10px" mat-raised-button (click)="onGoClick()">
+        Go!
+      </button>
+      <button
+        style="margin-left: 10px"
+        mat-raised-button
+        (click)="markPrivate()"
+        *ngIf="loggedIn"
+        data-toggle="tooltip"
+        title="Mark Selected folder(s) Private"
+      >
+        <span class="material-icons">lock</span>
+      </button>
+      <button
+        style="margin-left: 10px"
+        mat-raised-button
+        (click)="markPublic()"
+        *ngIf="loggedIn"
+        data-toggle="tooltip"
+        title="Mark Selected folder(s) Public"
+      >
+        <span class="material-icons">remove_red_eye</span>
+      </button>
+      <button
+        style="margin-left: 10px"
+        mat-raised-button
+        (click)="movePhotos()"
+        *ngIf="loggedIn"
+        data-toggle="tooltip"
+        title="Move selected photos to selected folder"
+      >
         Move
-   </button>
-    <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
-  </div> 
-</mat-drawer-container>
+      </button>
+      <app-photo-list [searchKey]="searchKey" [paths]="paths"></app-photo-list>
+    </div>
+  </mat-drawer-container>
 </div>

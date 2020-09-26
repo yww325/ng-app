@@ -1,34 +1,57 @@
 <div *ngIf="totalItems">
-  <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize" (changePage)="onChangePage($event)"></jw-pagination>
+  <jw-pagination
+    [totalItems]="totalItems"
+    [currentPage]="currentPage"
+    [pageSize]="pageSize"
+    (changePage)="onChangePage($event)"
+  ></jw-pagination>
   <div>
-    <mat-grid-list cols="{{cols}}" rowHeight="200px">
-      <mat-grid-tile  *ngFor="let photo of pageOfItems; index as i;"> 
-        <div style="display: inline-block; flex-direction: column; text-align: center;" >
-            <div class="border" [ngSwitch]="photo.mediaType">
-              <span class="helper"></span>
-              <img *ngSwitchCase="'photo'" src="data:image/jpeg;base64,{{photo.thumbnail}}"   
-              matTooltip='Tags: {{photo.tags}}&#13;Date Taken: {{photo.dateTaken}}'
-              matTooltipClass="allow-cr" 
+    <mat-grid-list cols="{{ cols }}" rowHeight="200px">
+      <mat-grid-tile *ngFor="let photo of pageOfItems; index as i">
+        <div
+          style="
+            display: inline-block;
+            flex-direction: column;
+            text-align: center;
+          "
+        >
+          <div class="border" [ngSwitch]="photo.mediaType">
+            <span class="helper"></span>
+            <img
+              *ngSwitchCase="'photo'"
+              src="data:image/jpeg;base64,{{ photo.thumbnail }}"
+              matTooltip="Tags: {{ photo.tags }}&#13;Date Taken: {{
+                photo.dateTaken
+              }}"
+              matTooltipClass="allow-cr"
               (click)="onClickThumb(i)"
-              />
+            />
 
-              <img *ngSwitchCase="'video'" src="assets/video_icon.jpg"   
-              matTooltip='Tags: {{photo.tags}}'
-              matTooltipClass="allow-cr" 
+            <img
+              *ngSwitchCase="'video'"
+              src="assets/video_icon.jpg"
+              matTooltip="Tags: {{ photo.tags }}"
+              matTooltipClass="allow-cr"
               (click)="onClickThumb(i)"
-              />
+            />
 
-              <img *ngSwitchCase="'sound'" src="assets/sound.png"   
-              matTooltip='Tags: {{photo.tags}}'
-              matTooltipClass="allow-cr" 
+            <img
+              *ngSwitchCase="'sound'"
+              src="assets/sound.png"
+              matTooltip="Tags: {{ photo.tags }}"
+              matTooltipClass="allow-cr"
               (click)="onClickThumb(i)"
-              /> 
+            />
           </div>
-          <input type="checkbox"  [(ngModel)]="photo.isChecked">  
+          <input type="checkbox" [(ngModel)]="photo.isChecked" />
         </div>
       </mat-grid-tile>
     </mat-grid-list>
   </div>
-  <jw-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize"  (changePage)="onChangePage($event)"></jw-pagination>
+  <jw-pagination
+    [totalItems]="totalItems"
+    [currentPage]="currentPage"
+    [pageSize]="pageSize"
+    (changePage)="onChangePage($event)"
+  ></jw-pagination>
 </div>
-
