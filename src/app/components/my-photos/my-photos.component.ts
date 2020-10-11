@@ -1,11 +1,14 @@
-import { Component, ViewChild, NgZone, OnInit} from '@angular/core';
-import { PhotoListComponent } from '../photo-list/photo-list.component';
-import { SelectionModel } from '@angular/cdk/collections';
-import { FolderFlatNode } from '../folder-tree/folder-database';
-import { TokenService } from 'src/app/services/token.service';
-import { PhotoService } from 'src/app/services/photo.service';
-import { MatDialog } from '@angular/material/dialog';
-import { GeneralDialogComponent, GeneralDialogData } from '../shared/general-dialog.component';
+import { Component, ViewChild, NgZone, OnInit } from "@angular/core";
+import { PhotoListComponent } from "../photo-list/photo-list.component";
+import { SelectionModel } from "@angular/cdk/collections";
+import { FolderFlatNode } from "../folder-tree/folder-database";
+import { TokenService } from "src/app/services/token.service";
+import { PhotoService } from "src/app/services/photo.service";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  GeneralDialogComponent,
+  GeneralDialogData,
+} from "../shared/general-dialog.component";
 
 interface Folder {
   path: string;
@@ -13,30 +16,34 @@ interface Folder {
 }
 
 @Component({
-  selector: 'app-my-photos',
-  templateUrl: './my-photos.component.html',
-  styleUrls: ['./my-photos.component.scss']
+  selector: "app-my-photos",
+  templateUrl: "./my-photos.component.html",
+  styleUrls: ["./my-photos.component.scss"],
 })
 export class MyPhotosComponent implements OnInit {
   loggedIn = false;
-  searchKey = '';
+  searchKey = "";
   folders: Folder[] = [];
 
   get paths(): string[] {
-    return this.folders.map(p => p.path);
+    return this.folders.map((p) => p.path);
   }
 
   @ViewChild(PhotoListComponent) photoList: PhotoListComponent;
 
-  constructor(private tokenService: TokenService, private photoService: PhotoService, private dialog: MatDialog) {}
+  constructor(
+    private tokenService: TokenService,
+    private photoService: PhotoService,
+    private dialog: MatDialog
+  ) {}
   ngOnInit(): void {
     const token = this.tokenService.getToken();
-    this.loggedIn =  token !== '' && token !== 'unauthorized';
+    this.loggedIn = token !== "" && token !== "unauthorized";
   }
 
   onKeydown(event) {
-    if (event.key === 'Enter') {
-     this.onGoClick();
+    if (event.key === "Enter") {
+      this.onGoClick();
     }
   }
 
@@ -46,70 +53,79 @@ export class MyPhotosComponent implements OnInit {
   }
 
   selectionChanged(selection: SelectionModel<FolderFlatNode>) {
-    const folders = selection.selected.map(f => {
-     return {path: f.path, id: f.id};
+    const folders = selection.selected.map((f) => {
+      return { path: f.path, id: f.id };
     });
     this.folders = folders;
   }
 
-
   markPrivate(): void {
-    this.folders.forEach(p => {
-      this.photoService.markPrivate(p.path).subscribe(o => {
-        console.log(`all photos under ${o} makred private.`);
-      },
-        err => {
-          console.log(err.message);
+    this.folders.forEach(async (p) => {
+      const folder = await this.photoService
+        .markPrivate(p.path)
+        .toPromise()
+        .catch((err) => {
+          console.log(err);
         });
+      console.log(`all photos under ${folder} makred private.`);
     });
   }
 
   markPublic(): void {
-    this.folders.forEach(p => {
-      this.photoService.markPublic(p.path).subscribe(o => {
-        console.log(`all photos under ${o} makred public.`);
-      },
-        err => {
-          console.log(err.message);
+    this.folders.forEach(async (p) => {
+      const folder = this.photoService
+        .markPublic(p.path)
+        .toPromise()
+        .catch((err) => {
+          console.log(err);
         });
+      console.log(`all photos under ${folder} makred public.`);
     });
   }
 
-  movePhotos() {
-    const checkedPhotos = this.photoList.pageOfItems.filter(p => p.isChecked).map(p => p.id);
+  async movePhotosAsync() {
+    const checkedPhotos = this.photoList.pageOfItems
+      .filter((p) => p.isChecked)
+      .map((p) => p.id);
     if (this.folders.length === 1 && checkedPhotos.length > 0) {
       const dlgalert = this.dialog.open(GeneralDialogComponent, {
-        width: '450px',
-        data: { yes: 'Yes',
-          no: 'No',
-          title: 'confirm',
-          okOnly : false,
-          message: `Are you sure you want to move ${checkedPhotos.length} photos to ${this.folders[0].path} ?` }
+        width: "450px",
+        data: {
+          yes: "Yes",
+          no: "No",
+          title: "confirm",
+          okOnly: false,
+          message: `Are you sure you want to move ${checkedPhotos.length} photos to ${this.folders[0].path} ?`,
+        },
       });
-      dlgalert.afterClosed().subscribe(ret => {
-        if (ret === 'Yes') {
-          this.MovePhotosCore(checkedPhotos);
-        }
-      });
+      const ret = await dlgalert.afterClosed().toPromise();
+      if (ret === "Yes") {
+        this.MovePhotosCoreAsync(checkedPhotos);
+      }
     } else {
-        this.dialog.open(GeneralDialogComponent, {
-        width: '450px',
-        data: { title: 'error', message: 'You need to select 1 folder and more than one photos to move.' }
+      this.dialog.open(GeneralDialogComponent, {
+        width: "450px",
+        data: {
+          title: "error",
+          message:
+            "You need to select 1 folder and more than one photos to move.",
+        },
       });
     }
-
   }
 
-  private MovePhotosCore(checkedPhotos: string[]) {
-    this.photoService.movePhotos(checkedPhotos, this.folders[0].id).subscribe(result => {
-      const dlg = this.dialog.open(GeneralDialogComponent, {
-        width: '450px',
-        data: { title: 'success', message: result }
+  private async MovePhotosCoreAsync(checkedPhotos: string[]) {
+    const result = await this.photoService
+      .movePhotos(checkedPhotos, this.folders[0].id)
+      .toPromise()
+      .catch((err) => {
+        console.log(err);
       });
-      dlg.afterClosed().subscribe(_ => {
-        this.onGoClick();
-      });
+    const dlg = this.dialog.open(GeneralDialogComponent, {
+      width: "450px",
+      data: { title: "success", message: result },
     });
+    await dlg.afterClosed().toPromise();
+    this.onGoClick();
   }
-
 }

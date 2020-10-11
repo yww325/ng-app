@@ -1,55 +1,96 @@
 <div class="modal-content">
   <div class="topBar">
-    <span *ngIf="loggedIn"  class="material-icons">{{isPrivate?'lock':'remove_red_eye'}}</span>
+    <span *ngIf="loggedIn" class="material-icons">{{
+      isPrivate ? "lock" : "remove_red_eye"
+    }}</span>
     <span class="close" (click)="closeModal()">&times;</span>
-  </div>  
-  <div [ngSwitch]="mediaType"> 
+  </div>
+  <div [ngSwitch]="mediaType">
     <div class="center" *ngIf="showSpinner">
       <mat-spinner color="accent"></mat-spinner>
-    </div> 
-   <img *ngSwitchCase="'photo'" #myPhoto  class="fit" />   
-    <div *ngSwitchCase="'video'"  class="video-fit"  >
-      <mat-video src="{{videoUrl}}" [download]="true" ></mat-video>
     </div>
-    
-    
-
-  </div>    
-    <!-- Next/previous controls -->
-    <!-- https://www.w3schools.com/howto/howto_js_lightbox.asp -->
-    <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
-    <a class="next" (click)="plusSlides(1)">&#10095;</a>
+    <img *ngSwitchCase="'photo'" #myPhoto class="fit" />
+    <div *ngSwitchCase="'video'" class="video-fit">
+      <mat-video src="{{ videoUrl }}" [download]="true"></mat-video>
+    </div>
+  </div>
+  <!-- Next/previous controls -->
+  <!-- https://www.w3schools.com/howto/howto_js_lightbox.asp -->
+  <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+  <a class="next" (click)="plusSlides(1)">&#10095;</a>
 </div>
- <!-- https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/ -->
-<div style="text-align: center;" >
-  <button  type="button" *ngIf="loggedIn"  data-toggle="tooltip" title="make it private"  style="float: left;"  mat-raised-button color ="primary" (click)="markPrivateById()">  
+<!-- https://www.freecodecamp.org/news/how-to-center-things-with-style-in-css-dc87b7542689/ -->
+<div style="text-align: center">
+  <button
+    type="button"
+    *ngIf="loggedIn"
+    data-toggle="tooltip"
+    title="make it private"
+    style="float: left"
+    mat-raised-button
+    color="primary"
+    (click)="markPrivateByIdAsync()"
+  >
     <span class="material-icons">lock</span>
-  </button> 
-  
-    <div style="display: inline-block; flex-direction: column;" >
-      <div *ngIf="!isEdit">
-          <span>Tags:</span>
-          <span>{{tagsInOneLine}}</span>  
-          <button tags type="button" class="tagsButton" *ngIf="loggedIn" data-toggle="tooltip" title="Edit Tags"  mat-raised-button color ="primary" (click)="editTags()">  
-            Edit Tags
-          </button> 
-      </div> 
-      <div *ngIf="isEdit&&loggedIn">
-        <span>Tags:</span>
-        <input class="tagsInput" [(ngModel)]="tagsInOneLine">
-        <button  type="button" class="tagsButton" data-toggle="tooltip" title="Cancel Edit Tags"   mat-raised-button color ="primary" (click)="cancelEditTags()">  
-          Cancel
-        </button> 
-        <button  type="button" class="tagsButton" data-toggle="tooltip" title="Save Tags"   mat-raised-button color ="primary" (click)="saveTags()">  
-          Save
-        </button> 
-      </div>
-      <span >Date taken: {{pageOfItems[index].dateTaken}}</span>
-    </div> 
-   
-  <button type="button"  *ngIf="loggedIn" data-toggle="tooltip" title="make it pubic"  style="float: right;" mat-raised-button color ="primary" (click)="markPublicById()">  
-    <span class="material-icons">remove_red_eye</span>
-  </button> 
-</div>
- 
+  </button>
 
+  <div style="display: inline-block; flex-direction: column">
+    <div *ngIf="!isEdit">
+      <span>Tags:</span>
+      <span>{{ tagsInOneLine }}</span>
+      <button
+        tags
+        type="button"
+        class="tagsButton"
+        *ngIf="loggedIn"
+        data-toggle="tooltip"
+        title="Edit Tags"
+        mat-raised-button
+        color="primary"
+        (click)="editTags()"
+      >
+        Edit Tags
+      </button>
+    </div>
+    <div *ngIf="isEdit && loggedIn">
+      <span>Tags:</span>
+      <input class="tagsInput" [(ngModel)]="tagsInOneLine" />
+      <button
+        type="button"
+        class="tagsButton"
+        data-toggle="tooltip"
+        title="Cancel Edit Tags"
+        mat-raised-button
+        color="primary"
+        (click)="cancelEditTags()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="tagsButton"
+        data-toggle="tooltip"
+        title="Save Tags"
+        mat-raised-button
+        color="primary"
+        (click)="saveTagsAsync()"
+      >
+        Save
+      </button>
+    </div>
+    <span>Date taken: {{ pageOfItems[index].dateTaken }}</span>
+  </div>
+
+  <button
+    type="button"
+    *ngIf="loggedIn"
+    data-toggle="tooltip"
+    title="make it pubic"
+    style="float: right"
+    mat-raised-button
+    color="primary"
+    (click)="markPublicByIdAsync()"
+  >
+    <span class="material-icons">remove_red_eye</span>
+  </button>
+</div>
