@@ -16,6 +16,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatButtonModule } from "@angular/material/button";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 //  import {
 //   MatAutocompleteModule,
 //   MatBadgeModule,
@@ -73,6 +74,7 @@ import { MatButtonModule } from "@angular/material/button";
     MatTooltipModule,
     MatGridListModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class DemoMaterialModule {}
