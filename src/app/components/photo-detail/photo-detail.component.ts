@@ -10,6 +10,9 @@ import { Photo } from "src/app/models/photo";
 import { PhotoService } from "src/app/services/photo.service";
 import { environment } from "../../../environments/environment";
 import { TokenService } from "src/app/services/token.service";
+import { Store } from "@ngrx/store";
+import * as fromPhoto from "../../store/reducers/photo.reducer";
+import { loadPhotos } from "src/app/store/actions/photo.actions";
 
 @Component({
   selector: "app-photo-detail",
@@ -38,6 +41,7 @@ export class PhotoDetailComponent implements OnInit {
   tagsInOneLine: string;
 
   constructor(
+    private store: Store<fromPhoto.State>,
     private photoService: PhotoService,
     private tokenService: TokenService,
     public dialogRef: MatDialogRef<PhotoDetailComponent>,
@@ -123,6 +127,61 @@ export class PhotoDetailComponent implements OnInit {
     this.reloadPageOfItemsAsync(direction, true);
   }
 
+  async markPrivateByIdAsync() {
+    const photo = this.pageOfItems[this.index];
+    const ret = await this.photoService
+      .markPrivateById(photo.id)
+      .toPromise()
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+    if (ret !== null) {
+      this.isPrivate = true;
+      this.ReloadPhotosInfo();
+    }
+  }
+
+  async markPublicByIdAsync() {
+    const photo = this.pageOfItems[this.index];
+    const ret = await this.photoService
+      .markPublicById(photo.id)
+      .toPromise()
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+    if (ret !== null) {
+      this.isPrivate = false;
+      this.ReloadPhotosInfo();
+    }
+  }
+
+  editTags() {
+    this.isEdit = true;
+  }
+
+  cancelEditTags() {
+    this.isEdit = false;
+    this.tagsInOneLine = this.pageOfItems[this.index].tags.join();
+  }
+
+  async saveTagsAsync() {
+    const photo = this.pageOfItems[this.index];
+    const newTags = this.tagsInOneLine.toLowerCase().split(",");
+    const ret = await this.photoService
+      .updateTags(photo.id, newTags)
+      .toPromise()
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+    if (ret !== null) {
+      this.isEdit = false;
+      this.ReloadPhotosInfo();
+    }
+  }
+
   private async reloadPageOfItemsAsync(
     direction: number,
     changeIndex: boolean
@@ -153,56 +212,14 @@ export class PhotoDetailComponent implements OnInit {
     }
   }
 
-  async markPrivateByIdAsync() {
-    const photo = this.pageOfItems[this.index];
-    const ret = await this.photoService
-      .markPrivateById(photo.id)
-      .toPromise()
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
-    if (ret !== null) {
-      this.reloadPageOfItemsAsync(0, false);
-    }
-  }
-
-  async markPublicByIdAsync() {
-    const photo = this.pageOfItems[this.index];
-    const ret = await this.photoService
-      .markPublicById(photo.id)
-      .toPromise()
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
-    if (ret !== null) {
-      this.reloadPageOfItemsAsync(0, false);
-    }
-  }
-
-  editTags() {
-    this.isEdit = true;
-  }
-
-  cancelEditTags() {
-    this.isEdit = false;
-    this.tagsInOneLine = this.pageOfItems[this.index].tags.join();
-  }
-
-  async saveTagsAsync() {
-    this.isEdit = false;
-    const photo = this.pageOfItems[this.index];
-    const newTags = this.tagsInOneLine.toLowerCase().split(",");
-    const ret = await this.photoService
-      .updateTags(photo.id, newTags)
-      .toPromise()
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
-    if (ret !== null) {
-      this.reloadPageOfItemsAsync(0, false);
-    }
+  private ReloadPhotosInfo() {
+    this.store.dispatch(
+      loadPhotos({
+        key: this.searchKey.toLowerCase(),
+        pageSize: this.pageSize,
+        skipPage: this.currentPage - 1,
+        paths: this.paths,
+      })
+    );
   }
 }
