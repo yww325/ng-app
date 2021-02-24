@@ -28,7 +28,9 @@ export class PhotoService {
   ): Observable<any> {
     const reducer = (accumulator: string, currentValue: string) =>
       accumulator +
-      ` or Path eq '${encodeURIComponent(this.escapeQuote(currentValue))}'`;
+      ` or startswith(Path, '${encodeURIComponent(
+        this.escapeQuote(currentValue)
+      )}')`;
     const startWithPaths =
       paths.length === 0
         ? ""
