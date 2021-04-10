@@ -46,14 +46,18 @@ export class PhotoService {
   }
 
   public markPrivate(path: string): Observable<any> {
-    return this.http.patch(this.privateUrl + `path=${path}`, null, {
-      responseType: "text",
-    });
+    return this.http.patch(
+      this.privateUrl + `path=${encodeURIComponent(path)}`,
+      null,
+      {
+        responseType: "text",
+      }
+    );
   }
 
   public markPublic(path: string): Observable<any> {
     return this.http.patch(
-      this.privateUrl + `path=${path}&toPrivate=false`,
+      this.privateUrl + `path=${encodeURIComponent(path)}&toPrivate=false`,
       null,
       { responseType: "text" }
     );
