@@ -9,10 +9,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Photo } from "src/app/models/photo";
 import { PhotoService } from "src/app/services/photo.service";
 import { environment } from "../../../environments/environment";
-import { TokenService } from "src/app/services/token.service";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import * as fromPhoto from "../../store/reducers/photo.reducer";
 import { loadPhotos } from "src/app/store/actions/photo.actions";
+import { UserState } from "src/app/store/reducers/user.reducer";
+import { selectLoginState } from "src/app/store/selectors/user.selectors";
 
 @Component({
   selector: "app-photo-detail",
@@ -35,16 +36,16 @@ export class PhotoDetailComponent implements OnInit {
   paths: string[];
   mediaType: string;
   videoUrl: string;
-  loggedIn = false;
   isPrivate: boolean;
   isEdit = false;
   tagsInOneLine: string;
+  loginState$ = this._store.pipe(select(selectLoginState));
 
   constructor(
     private store: Store<fromPhoto.State>,
     private photoService: PhotoService,
-    private tokenService: TokenService,
     public dialogRef: MatDialogRef<PhotoDetailComponent>,
+    private _store: Store<UserState>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.pageOfItems = data.pageOfItems;
@@ -56,8 +57,6 @@ export class PhotoDetailComponent implements OnInit {
     this.paths = data.paths;
   }
   ngOnInit(): void {
-    const token = this.tokenService.getToken();
-    this.loggedIn = token !== "" && token !== "unauthorized";
     this.SetUrl();
   }
 

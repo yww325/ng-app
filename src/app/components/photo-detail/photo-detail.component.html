@@ -1,6 +1,6 @@
 <div class="modal-content">
   <div class="topBar">
-    <span *ngIf="loggedIn" class="material-icons">{{
+    <span *ngIf="(loginState$ | async) === 'loggedin'" class="material-icons">{{
       isPrivate ? "lock" : "remove_red_eye"
     }}</span>
     <span class="close" (click)="closeModal()">&times;</span>
@@ -56,7 +56,7 @@
 <div style="text-align: center">
   <button
     type="button"
-    *ngIf="loggedIn"
+    *ngIf="(loginState$ | async) === 'loggedin'"
     data-toggle="tooltip"
     title="make it private"
     style="float: left"
@@ -75,7 +75,7 @@
         tags
         type="button"
         class="tagsButton"
-        *ngIf="loggedIn"
+        *ngIf="(loginState$ | async) === 'loggedin'"
         data-toggle="tooltip"
         title="Edit Tags"
         mat-raised-button
@@ -85,7 +85,7 @@
         Edit Tags
       </button>
     </div>
-    <div *ngIf="isEdit && loggedIn">
+    <div *ngIf="isEdit && (loginState$ | async) === 'loggedin'">
       <span>Tags:</span>
       <input class="tagsInput" [(ngModel)]="tagsInOneLine" />
       <button
@@ -116,7 +116,7 @@
 
   <button
     type="button"
-    *ngIf="loggedIn"
+    *ngIf="(loginState$ | async) === 'loggedin'"
     data-toggle="tooltip"
     title="make it pubic"
     style="float: right"

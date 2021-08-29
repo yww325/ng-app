@@ -1,16 +1,35 @@
-
-  <p>This is a private site, need login to set private photos.</p>
-  <mat-form-field  *ngIf="!loggedIn" >
-    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password" (keydown.enter)="login()" required>
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-  </mat-form-field>
-  <button type="button" mat-raised-button color ="primary" (click)="login()">  
-      {{ loggedIn?'Logout':'Login' }}   
-    </button> 
-     <br/>
-  <ng-container *ngIf="showMessage">
-    <!-- https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/ -->
-      <p style="color:red;">password is not correct!</p>
-  </ng-container>
+<p>This is a private site, need login to set private photos.</p>
+<mat-form-field *ngIf="(loginState$ | async) !== 'loggedin'">
+  <input
+    matInput
+    placeholder="Enter your password"
+    [type]="hide ? 'password' : 'text'"
+    [(ngModel)]="password"
+    (keydown.enter)="login()"
+    required
+  />
+  <button
+    mat-icon-button
+    matSuffix
+    (click)="hide = !hide"
+    [attr.aria-label]="'Hide password'"
+    [attr.aria-pressed]="hide"
+  >
+    <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+  </button>
+</mat-form-field>
+<ng-container *ngIf="true">
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="login($event)"
+  >
+    {{ (loginState$ | async) === "loggedin" ? "Logout" : "Login" }}
+  </button>
+</ng-container>
+<br />
+<ng-container *ngIf="(loginState$ | async) === 'unauthorized'">
+  <!-- https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/ -->
+  <p style="color: red">password is not correct!</p>
+</ng-container>

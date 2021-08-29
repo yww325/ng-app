@@ -2,13 +2,15 @@ import { Component, ViewChild, NgZone, OnInit } from "@angular/core";
 import { PhotoListComponent } from "../photo-list/photo-list.component";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FolderFlatNode } from "../folder-tree/folder-database";
-import { TokenService } from "src/app/services/token.service";
 import { PhotoService } from "src/app/services/photo.service";
 import { MatDialog } from "@angular/material/dialog";
 import {
   GeneralDialogComponent,
   GeneralDialogData,
 } from "../shared/general-dialog.component";
+import { select, Store } from "@ngrx/store";
+import { selectLoginState } from "src/app/store/selectors/user.selectors";
+import { UserState } from "src/app/store/reducers/user.reducer";
 
 interface Folder {
   path: string;
@@ -20,7 +22,7 @@ interface Folder {
   templateUrl: "./my-photos.component.html",
   styleUrls: ["./my-photos.component.scss"],
 })
-export class MyPhotosComponent implements OnInit {
+export class MyPhotosComponent {
   loggedIn = false;
   searchKey = "";
   folders: Folder[] = [];
@@ -31,15 +33,13 @@ export class MyPhotosComponent implements OnInit {
 
   @ViewChild(PhotoListComponent) photoList: PhotoListComponent;
 
+  loginState$ = this._store.pipe(select(selectLoginState));
+
   constructor(
-    private tokenService: TokenService,
     private photoService: PhotoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _store: Store<UserState>
   ) {}
-  ngOnInit(): void {
-    const token = this.tokenService.getToken();
-    this.loggedIn = token !== "" && token !== "unauthorized";
-  }
 
   onKeydown(event) {
     if (event.key === "Enter") {

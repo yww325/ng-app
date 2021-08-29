@@ -1,7 +1,7 @@
-
+<!--this is not currently used-->
 <ul *ngIf="users">
   <li *ngFor="let user of users | async">
-    <img [src]="user.avatar">
+    <img [src]="user.avatar" />
     <p>{{ user.first_name }} {{ user.last_name }}</p>
   </li>
 </ul>

@@ -1,24 +1,33 @@
-import { Component,  OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
-import {SelectionModel} from '@angular/cdk/collections';
-import { FolderDatabase, FolderFlatNode, FolderNode } from './folder-database';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
-import { Subscription } from 'rxjs';
-import { CreateNewFolderDialogComponent } from './create-new-folder-dialog.component';
-import { FolderService } from 'src/app/services/folder.service';
-import { TokenService } from 'src/app/services/token.service';
-import { GeneralDialogComponent } from '../shared/general-dialog.component';
+import {
+  Component,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  OnInit,
+} from "@angular/core";
+import { SelectionModel } from "@angular/cdk/collections";
+import { FolderDatabase, FolderFlatNode, FolderNode } from "./folder-database";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  MatTreeFlattener,
+  MatTreeFlatDataSource,
+} from "@angular/material/tree";
+import { Subscription } from "rxjs";
+import { CreateNewFolderDialogComponent } from "./create-new-folder-dialog.component";
+import { FolderService } from "src/app/services/folder.service";
+import { GeneralDialogComponent } from "../shared/general-dialog.component";
+import { select, Store } from "@ngrx/store";
+import { UserState } from "src/app/store/reducers/user.reducer";
+import { selectLoginState } from "src/app/store/selectors/user.selectors";
 
 @Component({
-  selector: 'app-folder-tree',
-  templateUrl: './folder-tree.component.html',
-  styleUrls: ['./folder-tree.component.scss'],
-  providers: [FolderDatabase]
+  selector: "app-folder-tree",
+  templateUrl: "./folder-tree.component.html",
+  styleUrls: ["./folder-tree.component.scss"],
+  providers: [FolderDatabase],
 })
 export class FolderTreeComponent implements OnDestroy, OnInit {
-
-
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<FolderFlatNode, FolderNode>();
 
@@ -36,25 +45,37 @@ export class FolderTreeComponent implements OnDestroy, OnInit {
   /** The selection for checklist */
   checklistSelection = new SelectionModel<FolderFlatNode>(true /* multiple */);
   //  https://indepth.dev/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error/
-  @Output() selectionChanged = new EventEmitter<SelectionModel<FolderFlatNode>>(true);
-  loggedIn: boolean;
+  @Output() selectionChanged = new EventEmitter<SelectionModel<FolderFlatNode>>(
+    true
+  );
+  loginState$ = this._store.pipe(select(selectLoginState));
 
-  constructor(private database: FolderDatabase,
-              private dialog: MatDialog,
-              private folderService: FolderService,
-              private tokenService: TokenService) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
-      this.isExpandable, this.getChildren);
-    this.treeControl = new FlatTreeControl<FolderFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  constructor(
+    private database: FolderDatabase,
+    private dialog: MatDialog,
+    private folderService: FolderService,
+    private _store: Store<UserState>
+  ) {
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren
+    );
+    this.treeControl = new FlatTreeControl<FolderFlatNode>(
+      this.getLevel,
+      this.isExpandable
+    );
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
     this.checklistSelection.changed.subscribe(() => {
-        this.selectionChanged.emit(this.checklistSelection);
+      this.selectionChanged.emit(this.checklistSelection);
     });
   }
   ngOnInit(): void {
-    const token = this.tokenService.getToken();
-    this.loggedIn =  token !== '' && token !== 'unauthorized';
-    this.sub = this.database.dataChange.subscribe(data => {
+    this.sub = this.database.dataChange.subscribe((data) => {
       this.dataSource.data = data;
     });
     if (!this.dataSource.data || this.dataSource.data.length == 0) {
@@ -82,7 +103,7 @@ export class FolderTreeComponent implements OnDestroy, OnInit {
     if (existingNode && existingNode.path === node.path) {
       return existingNode;
     }
-    const flatNode =  new FolderFlatNode();
+    const flatNode = new FolderFlatNode();
     flatNode.path = node.path;
     flatNode.name = node.name;
     flatNode.id = node.id;
@@ -91,16 +112,15 @@ export class FolderTreeComponent implements OnDestroy, OnInit {
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   checkAll() {
-      for (const node of this.treeControl.dataNodes) {
-          if (!this.checklistSelection.isSelected(node)) {
-                this.checklistSelection.select(node);
-            }
+    for (const node of this.treeControl.dataNodes) {
+      if (!this.checklistSelection.isSelected(node)) {
+        this.checklistSelection.select(node);
       }
+    }
   }
-
 
   clearAll() {
     this.checklistSelection.clear();
@@ -108,36 +128,42 @@ export class FolderTreeComponent implements OnDestroy, OnInit {
 
   createFolder() {
     if (this.checklistSelection.selected.length <= 1) {
-        const selected = this.checklistSelection.selected.length === 1
-            ? this.checklistSelection.selected[0]
-            : { path: 'Root', id : '000000000000000000000000'};
-        const dialogRef = this.dialog.open(CreateNewFolderDialogComponent, {
-          width: '450px',
-          data: {parentPath: selected.path, folderName: ''}
-        });
+      const selected =
+        this.checklistSelection.selected.length === 1
+          ? this.checklistSelection.selected[0]
+          : { path: "Root", id: "000000000000000000000000" };
+      const dialogRef = this.dialog.open(CreateNewFolderDialogComponent, {
+        width: "450px",
+        data: { parentPath: selected.path, folderName: "" },
+      });
 
-        dialogRef.afterClosed().subscribe(folderName => {
-          if (folderName !== undefined) {
-             this.folderService.createNewFolder(selected.id, folderName).subscribe(result => {
-                this.dialog.open(GeneralDialogComponent, {
-                  width: '450px',
-                  data: { title: 'folder creation result', message: result }
-                });
-                this.database.load();
-                this.checklistSelection.clear();
-             });
-          }
-        });
+      dialogRef.afterClosed().subscribe((folderName) => {
+        if (folderName !== undefined) {
+          this.folderService
+            .createNewFolder(selected.id, folderName)
+            .subscribe((result) => {
+              this.dialog.open(GeneralDialogComponent, {
+                width: "450px",
+                data: { title: "folder creation result", message: result },
+              });
+              this.database.load();
+              this.checklistSelection.clear();
+            });
+        }
+      });
     } else {
       this.dialog.open(GeneralDialogComponent, {
-        width: '450px',
-        data: { title: 'error', message: 'You need to select 1 folder as parent for your new folder.' }
+        width: "450px",
+        data: {
+          title: "error",
+          message: "You need to select 1 folder as parent for your new folder.",
+        },
       });
     }
   }
 
   /** Toggle the to-do item selection. don't Select/deselect all the descendants node anymore */
   todoItemSelectionToggle(node: FolderFlatNode) {
-      this.checklistSelection.toggle(node);
+    this.checklistSelection.toggle(node);
   }
 }
